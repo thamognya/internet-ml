@@ -14,7 +14,8 @@ import sys
 from pathlib import Path
 
 # Add utils directory to path
-sys.path.append(str(Path(__file__).parent.parent) + "/utils")
+sys.path.append(str(Path(__file__).parent.parent.parent) + "/utils/NLP")
+sys.path.append(str(Path(__file__).parent.parent.parent) + "/utils")
 import concurrent.futures
 
 import config
@@ -53,7 +54,7 @@ def sentencizer(text: str) -> list[str]:
         for future in concurrent.futures.as_completed(futures):
             english_sentences.append(future.result())
 
-    if config.CONF_DEBUG:
+    if config.NLP_CONF_DEBUG:
         logging.info(f"sentences: {english_sentences}")
     return english_sentences
 

@@ -1,4 +1,5 @@
-from typing import Any, Dict, List
+#type: ignore
+from typing import Any, Dict, List, Tuple
 
 import asyncio
 import logging
@@ -23,7 +24,8 @@ logging.basicConfig(
 import sys
 from pathlib import Path
 
-sys.path.append(str(Path(__file__).parent.parent.parent) + "/utils")
+sys.path.append(str(Path(__file__).parent.parent.parent.parent) + "/utils/NLP")
+sys.path.append(str(Path(__file__).parent.parent.parent.parent) + "/utils")
 import config
 
 sys.path.append(str(Path(__file__).parent.parent))
@@ -59,9 +61,10 @@ URL_EXTRACTOR = URLExtract()
 # Load the cache from the file (if it exists)
 try:
     with open(CACHE_FILE_PATH, "rb") as f:
-        cache = pickle.load(f)
+        cache: Any = pickle.load(f)
 except FileNotFoundError:
-    cache = {}
+    cache: Any = {}
+
 
 # Define the fetch_url function
 async def fetch_url(session: aiohttp.ClientSession, url: str) -> str:
@@ -87,11 +90,13 @@ async def google_urls(query: str, links: list[str]) -> list[str]:
 
     # Determine the number of results to retrieve based on the configuration mode
     num_of_res: int = (
-        5 if config.CONF_MODE == "speed" else (20 if config.CONF_MODE else 10)
+        5
+        if config.NLP_CONF_MODE == "speed"
+        else (20 if config.NLP_CONF_MODE == "accuracy" else 10)
     )
 
     # Log the number of results wanted (if debugging is enabled)
-    if config.CONF_DEBUG:
+    if config.NLP_CONF_DEBUG:
         logging.info(f"number of results wanted: {num_of_res}")
 
     # Construct the search URL
@@ -103,7 +108,7 @@ async def google_urls(query: str, links: list[str]) -> list[str]:
     )
 
     # Log the search URL (if debugging is enabled)
-    if config.CONF_DEBUG:
+    if config.NLP_CONF_DEBUG:
         logging.info(f"url: {search_url}")
 
     # Create an aiohttp session and use it to fetch the search results
@@ -126,7 +131,7 @@ async def google_urls(query: str, links: list[str]) -> list[str]:
                 not any(url.startswith(s) for s in UNWANTED_DOMAINS)
             ):
                 urls.append(url)
-                if config.CONF_DEBUG:
+                if config.NLP_CONF_DEBUG:
                     logging.info(f"added {url}")
             if len(urls) == num_of_res:
                 break
@@ -151,7 +156,7 @@ async def fetch_url_text(
         async with session.get(url, headers=HTTP_USERAGENT) as response:
             soup: BeautifulSoup = BeautifulSoup(await response.text(), "html.parser")
             text = normalizer(soup.get_text())
-            if config.CONF_DEBUG:
+            if config.NLP_CONF_DEBUG:
                 logging.info(f"Text: {text}")
             sentences: list[str] = sentencizer(text)
             sentences = filter_irrelevant(sentences, query)
@@ -181,38 +186,36 @@ async def get_text_content(urls: list[str], query: str) -> list[str]:
     return sentences
 
 
-def google(query: str) -> list[str]:
+def google(query: str) -> Tuple[List[str], str]:
     global cache, CACHE_FILE_PATH, CACHE_TIME, URL_EXTRACTOR
     links_in_text: list[str] = URL_EXTRACTOR.find_urls(query)
     query = re.sub(r"\w+:\/{2}[\d\w-]+(\.[\d\w-]+)*(?:(?:\/[^\s/]*))*", "", query)
     entry = cache.get(query)
     if entry is None:
         # no query exists, so add a new entry to the cache
-        text = asyncio.run(
-            get_text_content(asyncio.run(google_urls(query, links_in_text)), query)
-        )
-        cache[query] = (text, time.time() + CACHE_TIME)  # cache expires in one hour
+        urls: List[str] = asyncio.run(google_urls(query, links_in_text))
+        text: str = str(asyncio.run(get_text_content(urls, query)))
+        cache[query]: Tuple[Tuple[List[str], str], int] = (
+            (text, urls),
+            time.time() + CACHE_TIME,
+        )  # cache expires in one hour
     elif entry[1] < time.time():
         # update as it expired
-        text = asyncio.run(
-            get_text_content(asyncio.run(google_urls(query, links_in_text)), query)
-        )
-        cache[query] = (text, time.time() + CACHE_TIME)  # cache expires in one hour
+        urls: List[str] = asyncio.run(google_urls(query, links_in_text))
+        text: str = str(asyncio.run(get_text_content(urls, query)))
+        cache[query]: Tuple[Tuple[List[str], str], int] = (
+            (text, urls),
+            time.time() + CACHE_TIME,
+        )  # cache expires in one hour
     else:
         # available so return it
-        text = entry[0]
+        text: List[str] = entry[0][0]
+        urls: str = entry[0][1]
     # Save the cache to the file
     with open(CACHE_FILE_PATH, "wb") as f:
         pickle.dump(cache, f)
     # Return the text
-    return text
-
-
-print(
-    google(
-        "who is lionel messi https://en.wikipedia.org/wiki/Lionel_Messi https://en.wikipedia.org/wiki/Cristiano_Ronaldo https://www.instagram.com/leomessi/?hl=en"
-    )
-)
+    return (text, urls)
 
 
 """

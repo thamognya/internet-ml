@@ -18,12 +18,13 @@ import tokenizers
 from tokenizers.normalizers import NFKD, Lowercase, Strip, StripAccents
 
 # Add utils directory to path
-sys.path.append(str(Path(__file__).parent.parent) + "/utils")
+sys.path.append(str(Path(__file__).parent.parent.parent) + "/utils/NLP")
+sys.path.append(str(Path(__file__).parent.parent.parent) + "/utils")
 import config
 
 # Define normalization sequence
 NORMALIZER_SEQ: tokenizers.normalizers.Sequence = tokenizers.normalizers.Sequence(
-    [NFKD(), Strip(), StripAccents()]
+    [Lowercase(), NFKD(), Strip(), StripAccents()]
 )
 
 
@@ -66,7 +67,7 @@ def normalizer(text: str) -> str:
         .replace("               ", " ")
     )
     text = remove_non_ascii(text)
-    if config.CONF_DEBUG:
+    if config.NLP_CONF_DEBUG:
         logging.info(text)
     return text
 

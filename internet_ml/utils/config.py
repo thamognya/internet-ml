@@ -1,5 +1,3 @@
-import typing
-
 import logging
 
 logging.basicConfig(
@@ -10,16 +8,16 @@ logging.basicConfig(
 )
 
 # Global
-CONF_DEBUG: bool = True
+NLP_CONF_DEBUG: bool = True
 # NLP
-CONF_MODE: str = "default"
+NLP_CONF_MODE: str = "default"
 
 
 def NLP_config(mode: str = "default", debug: bool = True) -> None:
     global conf_MODE, conf_DEBUG
-    CONF_DEBUG = debug
+    NLP_CONF_DEBUG = debug
     if mode == "accuracy" or mode == "speed":
-        CONF_MODE = mode
+        NLP_CONF_MODE = mode
     else:
-        if CONF_DEBUG:
+        if NLP_CONF_DEBUG:
             logging.warn(f"mode: {mode} does not exist")
