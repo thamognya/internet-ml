@@ -3,6 +3,6 @@ for d in */ ; do
     [ -L "${d%/}" ] && continue
     echo "$d"
     cd "$d"
-    touch __init__.py
+    touch main.tex
     cd ..
 done

@@ -1,0 +1,73 @@
+\pdfoutput=1
+\documentclass[11pt,a4]{article}
+\usepackage[]{acl}
+\usepackage{times}
+\usepackage{latexsym}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{microtype}
+\usepackage{xspace}
+\usepackage{multirow}
+\usepackage{url}
+\usepackage{booktabs}
+\usepackage{tikz,tikz-qtree}
+\usepackage{pgfplots}
+\usepackage{amssymb}
+\usepackage{xfrac}
+\usepackage{graphicx}
+\usepackage{tablefootnote}
+\usepackage{amsmath}
+\usepackage{enumitem}
+\usepackage{import}
+\usepackage{tikz}
+\usetikzlibrary{chains,shadows.blur}
+\pgfplotsset{compat=1.14}
+
+\newcommand\BibTeX{B{\sc ib}\TeX}
+\newcommand\inlp{Internet-NLP\xspace}
+\newcommand{\eat}[1]{\ignorespaces}
+
+\definecolor{cred}{HTML}{DB4437}
+\definecolor{cblue}{HTML}{4285F4}
+\definecolor{cgreen}{HTML}{0F9D58}
+\definecolor{cyellow}{HTML}{F4B400}
+\definecolor{corange}{HTML}{FF9800}
+\definecolor{cgrey}{HTML}{9E9E9E}
+
+\setlength{\tabcolsep}{0.3em}
+
+\title{\textbf{Internet-NLP}: Allowing Natural Language Processing Models to Connect to the Internet}
+
+\author{
+    Thamognya Kodi \\
+    Ruamrudee International School \\
+    {\tt \href{mailto:contact@thamognya.com}{contact@thamognya.com}} \\
+}
+
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+    \import{abstract/}{main.tex}
+\end{abstract}
+
+\import{introduction/}{main.tex}
+
+\import{related_work/}{main.tex}
+
+\import{preliminaries/}{main.tex}
+
+\import{Internet-NLP/}{main.tex}
+
+% \bibliographystyle{acl_natbib}
+% \bibliographystyle{plain}
+\bibliography{ref}
+
+\pagenumbering{arabic} 
+\appendix
+\import{appendix/}{main.tex}
+
+\end{document}
