@@ -15,11 +15,12 @@ There are currently two main solutions for utilizing NLP tasks with no context p
                 \caption{This is an illustration of the architecture of T5, a popular Text2Text-Generation model \cite{alammar}.}
                 \label{fig:CurrSolOneSecondImg}
             \end{figure}
-            \item Pre-trained Text2Text-generation models, like T5 \cite{https://doi.org/10.48550/arxiv.1910.10683} that have open-domain question-answering closed-book (no context) language models (ODQA LM) capabilities \cite{weng2020odqa}. These closed-book QDQA LMs are comparatively state-of-the-art performance in many no-context NLP tasks, mainly question-answering. Text2Text-generation models for such no-context NLP tasks are usually large, slow, and have a low accuracy \cite{https://doi.org/10.48550/arxiv.2002.08910}.
+            \item Pre-trained Text-generation models, like GPT-NeoX, GPT-3, and etc. \cite{gpt-neox-20b,gpt-neox-library,DBLP:journals/corr/abs-2005-14165} can be trained for open-domain question-answering closed-book language model tasks (ODQA LM) \cite{weng2020odqa}. When used in ODQA tasks, they achieve SOTA results in such tasks, have high accuracy and are fast but are much larger in size than open-book (context-needing) language models.
+            \item Additionally Pre-trained Text2Text-generation models, like T5 \cite{https://doi.org/10.48550/arxiv.1910.10683} that have open-domain question-answering closed-book (no context) language models (ODQA LM) capabilities \cite{weng2020odqa}. These closed-book QDQA LMs are comparatively state-of-the-art performance in many no-context NLP tasks, mainly question-answering. Text2Text-generation models for such no-context NLP tasks are usually large, slow, and have a low accuracy \cite{DBLP:journals/corr/abs-2002-08910}.
             \item Example: T5 \cite{https://doi.org/10.48550/arxiv.1910.10683}
             \item Illustration of how ODQA LM work: \ref{fig:CurrSolOneImg}
         \end{itemize}
-    \item Large Knowledge Base with a Contex-Needing Language Model \label{CurrSolTwo}
+    \item Large Knowledge Database with a Contex-Needing Language Model \label{CurrSolTwo}
         \begin{itemize}[leftmargin=1em]
             \begin{figure}
                 \includegraphics[width=1.0\columnwidth]{artefacts_diagram.pdf}
