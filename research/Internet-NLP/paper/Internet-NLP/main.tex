@@ -1,0 +1,69 @@
+\section{Internet-NLP}
+
+This publication will introduce Internet-NLP and its control flow for allowing NLPs to connect to internet, which will replace traditional knowledge bases with the resources on the internet.
+
+\begin{figure}
+    \begin{center}
+        \input{control_flow}
+        \caption{This is an illustration of how Internet-NLP's control flow works.}
+        \label{fig:ControlFlow}
+    \end{center}
+\end{figure}
+
+In the control flow diagram \ref{fig:ControlFlow}, it shows how Internet-NLP gains its data for NLP tasks and also makes sure that the data scraped is accurate and not offensive for the NLP task it is being asked to do; Internet-NLP does this by utilizing several different NLP and NLI models in combination to enable this data collection system. This allows other NLP models to utilize the data to allow for other NLP tasks that was requested.
+
+Internet-NLP's control flow diagram \ref{fig:ControlFlow} will be explained in the following subsections.
+
+\subsection{NLP Tasks Applicable}
+
+Internet-NLP currently allow for the following NLP tasks without context:
+
+\begin{itemize}[leftmargin=1em]
+    \item Question Answering
+    \item Zero-Shot Classification
+    \item Natural Language Inference
+    \item Text2Text Generation
+    \item Conversational (this still in beta and does not completely work)
+\end{itemize}
+
+\subsection{Disclaimers}
+
+\subsubsection{Types of English}
+
+Internet-NLP at this point of time can only fully understand "formal" English \cite{FormalInformal}. Additionally idioms, similes, and other figures of speech are not understood by Internet-NLP or it's models.
+
+\subsubsection{Output of Internet-NLP}
+
+The accuracy of the output of Internet-NLP depends on the data it scrapes which may not be completely accurate (which the chances are minimized to an extent with utilizing mutliple resources) and may contain profanity or abrasive language which may or may not affect the output.
+
+\subsection{Common Components of Internet-NLP's Process}
+
+\subsubsection{Answer To Question Text2Text-generator\label{subsubsection:AnswerToQuestion}}
+
+\subsubsection{Search Queries Text2Text-generator \label{subsubsection:search-query}}
+
+The search query generator that enables converting questions into viable search queries utilizes a fastT5 model \cite{2019t5}. It is trained on reddit and quora questions (that are non-mathematical i.e does not require logical computation) and then passed through an parts of speech tagging model and normalizer wherein the question is optimized for search engines by removing specific details and punctuation \cite{BetterWebSearches}. 
+
+The reason for utilizing fastT5 models rather than the parts of speech tagging model comes down due to efficency issues as fastT5 outperforms the parts of speech tagging model \cite{inproceedings, 2019t5}. 
+
+\subsubsection{Data Collection \label{subsubsection:DataCollection}}
+
+\subsection{Question Answering}
+
+\subsubsection{Answer to Question Text2Text-generator}
+
+In the case of question answering without context, Internet-NLP only needs one of following:
+
+\begin{itemize}
+    \item Question
+    \begin{itemize}
+        \item In this case Internet-NLP passes the question through the Search Query Text2Text-generator \ref{subsubsection:search-query} wherein an output of a optimized search question for search engine is returned. This optimized question will be used for data collection \ref{subsubsection:DataCollection}.
+        \label{subsubsection:itemize:question}
+    \end{itemize}
+    \item Answer
+    \begin{itemize}
+        \item In this case the Answer to Question Text2Text-generator \ref{subsubsection:AnswerToQuestion}. After which it follows the same process of question optimization explained above in Question case \ref{subsubsection:itemize:question}.
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{Natural Language Inference Without Premise}

@@ -1,0 +1,15 @@
+\begin{tikzpicture}[auto,
+    node distance = 12mm,
+    start chain = going below,
+    box/.style = {draw,rounded corners,blur shadow,fill=white, on chain,align=center}]
+    \node[box] (b1)    {$x_1\leftarrow0$\\ $y_1\leftarrow0$};      
+    \node[box] (b2)    {$x_2\leftarrow\phi(x_1,x_3)$\\
+    $y_2\leftarrow\phi(y_1,y_3)$\\
+    $(x_2<10)$?};      
+    \node[box] (b3)    {$y_3\leftarrow y_2+x_2$\\ $x_3\leftarrow x_2+1$};  
+    \node[box] (b4)    {print($y_2$)};     
+    \begin{scope}[rounded corners,-latex]
+        \path (b2.-40) edge[bend left=50] (b4.40) (b1) edge (b2) (b2) edge (b3);
+        \draw (b3.230) -- ++(0,-0.3) -| ([xshift=-5mm]b2.west) |- ([yshift=3mm]b2.130) -- (b2.130);
+    \end{scope}
+\end{tikzpicture}

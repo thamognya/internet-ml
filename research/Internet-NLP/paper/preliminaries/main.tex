@@ -1,0 +1,22 @@
+%auto-ignore
+\section{Preliminaries}
+
+The preliminaries listed are NLP tasks Internet-NLP benefits from the access to internet listed:
+
+\subsection{Question Answering}
+
+The tasks of training an NLP model to utilize question, and context (or in the case of ODQA closed-book LM just question) to create a logical answer. The current most popular would be context-needing question answering models, where in the answer is provided in the context. These models utilize reading comprehension to utilize the context to make an answer based on the question \cite{https://doi.org/10.48550/arxiv.2002.08910}. 
+
+Closed-book QDQA LM are a type of question-answering model where there is no context provided, and these are usually the hardest variant to train, and results in large sizes, low efficency, and low accuracy. Thsese models can only be asked context-independent questions such as facts \cite{https://doi.org/10.48550/arxiv.2002.08910}.
+
+The alternative to ODQA LM would be utilizing a knowledge base and retriver for getting the required context from a knowledge base and then utilizing an context-needing question-answering NLP model which would be known as open-book question-answering model \cite{https://doi.org/10.48550/arxiv.2002.08910}. This however require knowledge base which would be static and hence would not contain the latest information; additionally requires a large database and hence the however solution is also large.
+
+In this publication, Internet-NLP applies question answering open-book LM with the constraint of not utilizing a knowledge base and keeping the overall solution size to be low, high efficency and high accuracy with the ability to also being asked context-dependent (by giving the optional context) and context-independent questions. Internet-NLP utilizes the internet to replace the knowledge base, utilize a retriver to get the required information from the internet data and then an open-book Text2Text-generation model to create an answer from the information, question and any extra context given.
+
+\subsection{Natural Language Inference}
+
+NLI models require a premise (similar to context) and hypothesis (an preidiction) to give one of the following: entailment (hypothesis is correct based on premise), neutral (hypothesis is neither correct nor wrong based on premise) and contradiction (hypothesis is wrong based on premise).
+
+Current no-premise NLI models utilizes a knowledge base to reproduce the premise via a retriver and then utilize an NLI model to then given output.
+
+In this publication, Internet-NLP produces the premise based on the hypothesis by converting the hypothesis into an search query (via an Text2Text-generation LM) which will then be scraped for results and then be indivisually compared to the hypothesis to to only select ones that have either contradiction or entailment to then give an ouput on wether its an entailment or contradiction. This allows for hypothesis to be checked if they are either correct or wrong without an large knowledge base or model.
