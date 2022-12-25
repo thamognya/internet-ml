@@ -1,194 +1,158 @@
+% Cleaned with bibtex-tidy
 @inproceedings{devlin-etal-2019-bert,
-    title = "{BERT}: Pre-training of Deep Bidirectional Transformers for Language Understanding",
-    author = "Devlin, Jacob  and
-      Chang, Ming-Wei  and
-      Lee, Kenton  and
-      Toutanova, Kristina",
-    booktitle = "Proceedings of the 2019 Conference of the North {A}merican Chapter of the Association for Computational Linguistics: Human Language Technologies, Volume 1 (Long and Short Papers)",
-    month = jun,
-    year = "2019",
-    address = "Minneapolis, Minnesota",
-    publisher = "Association for Computational Linguistics",
-    url = "https://aclanthology.org/N19-1423",
-    doi = "10.18653/v1/N19-1423",
-    pages = "4171--4186",
-    abstract = "We introduce a new language representation model called BERT, which stands for Bidirectional Encoder Representations from Transformers. Unlike recent language representation models (Peters et al., 2018a; Radford et al., 2018), BERT is designed to pre-train deep bidirectional representations from unlabeled text by jointly conditioning on both left and right context in all layers. As a result, the pre-trained BERT model can be fine-tuned with just one additional output layer to create state-of-the-art models for a wide range of tasks, such as question answering and language inference, without substantial task-specific architecture modifications. BERT is conceptually simple and empirically powerful. It obtains new state-of-the-art results on eleven natural language processing tasks, including pushing the GLUE score to 80.5 (7.7 point absolute improvement), MultiNLI accuracy to 86.7{\%} (4.6{\%} absolute improvement), SQuAD v1.1 question answering Test F1 to 93.2 (1.5 point absolute improvement) and SQuAD v2.0 Test F1 to 83.1 (5.1 point absolute improvement).",
+	title        = {{BERT}: Pre-training of Deep Bidirectional Transformers for Language Understanding},
+	author       = {Devlin, Jacob  and Chang, Ming-Wei  and Lee, Kenton  and Toutanova, Kristina},
+	year         = 2019,
+	month        = jun,
+	booktitle    = {Proceedings of the 2019 Conference of the North {A}merican Chapter of the Association for Computational Linguistics: Human Language Technologies, Volume 1 (Long and Short Papers)},
+	publisher    = {Association for Computational Linguistics},
+	address      = {Minneapolis, Minnesota},
+	pages        = {4171--4186},
+	doi          = {10.18653/v1/N19-1423},
+	url          = {https://aclanthology.org/N19-1423},
+	abstract     = {We introduce a new language representation model called BERT, which stands for Bidirectional Encoder Representations from Transformers. Unlike recent language representation models (Peters et al., 2018a; Radford et al., 2018), BERT is designed to pre-train deep bidirectional representations from unlabeled text by jointly conditioning on both left and right context in all layers. As a result, the pre-trained BERT model can be fine-tuned with just one additional output layer to create state-of-the-art models for a wide range of tasks, such as question answering and language inference, without substantial task-specific architecture modifications. BERT is conceptually simple and empirically powerful. It obtains new state-of-the-art results on eleven natural language processing tasks, including pushing the GLUE score to 80.5 (7.7 point absolute improvement), MultiNLI accuracy to 86.7{\%} (4.6{\%} absolute improvement), SQuAD v1.1 question answering Test F1 to 93.2 (1.5 point absolute improvement) and SQuAD v2.0 Test F1 to 83.1 (5.1 point absolute improvement).}
 }
-
 @inproceedings{yasunaga-etal-2022-linkbert,
-    title = "{L}ink{BERT}: Pretraining Language Models with Document Links",
-    author = "Yasunaga, Michihiro  and
-      Leskovec, Jure  and
-      Liang, Percy",
-    booktitle = "Proceedings of the 60th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)",
-    month = may,
-    year = "2022",
-    address = "Dublin, Ireland",
-    publisher = "Association for Computational Linguistics",
-    url = "https://aclanthology.org/2022.acl-long.551",
-    doi = "10.18653/v1/2022.acl-long.551",
-    pages = "8003--8016",
-    abstract = "Language model (LM) pretraining captures various knowledge from text corpora, helping downstream tasks. However, existing methods such as BERT model a single document, and do not capture dependencies or knowledge that span across documents. In this work, we propose LinkBERT, an LM pretraining method that leverages links between documents, e.g., hyperlinks. Given a text corpus, we view it as a graph of documents and create LM inputs by placing linked documents in the same context. We then pretrain the LM with two joint self-supervised objectives: masked language modeling and our new proposal, document relation prediction. We show that LinkBERT outperforms BERT on various downstream tasks across two domains: the general domain (pretrained on Wikipedia with hyperlinks) and biomedical domain (pretrained on PubMed with citation links). LinkBERT is especially effective for multi-hop reasoning and few-shot QA (+5{\%} absolute improvement on HotpotQA and TriviaQA), and our biomedical LinkBERT sets new states of the art on various BioNLP tasks (+7{\%} on BioASQ and USMLE). We release our pretrained models, LinkBERT and BioLinkBERT, as well as code and data.",
+	title        = {{L}ink{BERT}: Pretraining Language Models with Document Links},
+	author       = {Yasunaga, Michihiro  and Leskovec, Jure  and Liang, Percy},
+	year         = 2022,
+	month        = may,
+	booktitle    = {Proceedings of the 60th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
+	publisher    = {Association for Computational Linguistics},
+	address      = {Dublin, Ireland},
+	pages        = {8003--8016},
+	doi          = {10.18653/v1/2022.acl-long.551},
+	url          = {https://aclanthology.org/2022.acl-long.551},
+	abstract     = {Language model (LM) pretraining captures various knowledge from text corpora, helping downstream tasks. However, existing methods such as BERT model a single document, and do not capture dependencies or knowledge that span across documents. In this work, we propose LinkBERT, an LM pretraining method that leverages links between documents, e.g., hyperlinks. Given a text corpus, we view it as a graph of documents and create LM inputs by placing linked documents in the same context. We then pretrain the LM with two joint self-supervised objectives: masked language modeling and our new proposal, document relation prediction. We show that LinkBERT outperforms BERT on various downstream tasks across two domains: the general domain (pretrained on Wikipedia with hyperlinks) and biomedical domain (pretrained on PubMed with citation links). LinkBERT is especially effective for multi-hop reasoning and few-shot QA (+5{\%} absolute improvement on HotpotQA and TriviaQA), and our biomedical LinkBERT sets new states of the art on various BioNLP tasks (+7{\%} on BioASQ and USMLE). We release our pretrained models, LinkBERT and BioLinkBERT, as well as code and data.}
 }
-
 @software{gpt-neox-library,
-  title = {{GPT-NeoX: Large Scale Autoregressive Language Modeling in PyTorch}},
-  author = {Andonian, Alex and Anthony, Quentin and Biderman, Stella and Black, Sid and Gali, Preetham and Gao, Leo and Hallahan, Eric and Levy-Kramer, Josh and Leahy, Connor and Nestler, Lucas and Parker, Kip and Pieler, Michael and Purohit, Shivanshu and Songz, Tri and Phil, Wang and Weinbach, Samuel},
-  url = {https://www.github.com/eleutherai/gpt-neox},
-  doi = {10.5281/zenodo.5879544},
-  month = {8},
-  year = {2021},
-  version = {0.0.1},
+	title        = {{GPT-NeoX: Large Scale Autoregressive Language Modeling in PyTorch}},
+	author       = {Andonian, Alex and Anthony, Quentin and Biderman, Stella and Black, Sid and Gali, Preetham and Gao, Leo and Hallahan, Eric and Levy-Kramer, Josh and Leahy, Connor and Nestler, Lucas and Parker, Kip and Pieler, Michael and Purohit, Shivanshu and Songz, Tri and Phil, Wang and Weinbach, Samuel},
+	year         = 2021,
+	month        = 8,
+	doi          = {10.5281/zenodo.5879544},
+	url          = {https://www.github.com/eleutherai/gpt-neox},
+	version      = {0.0.1}
 }
-
 @inproceedings{gpt-neox-20b,
-  title={{GPT-NeoX-20B}: An Open-Source Autoregressive Language Model},
-  author={Black, Sid and Biderman, Stella and Hallahan, Eric and Anthony, Quentin and Gao, Leo and Golding, Laurence and He, Horace and Leahy, Connor and McDonell, Kyle and Phang, Jason and Pieler, Michael and Prashanth, USVSN Sai and Purohit, Shivanshu and Reynolds, Laria and Tow, Jonathan and Wang, Ben and Weinbach, Samuel},
-  booktitle={Proceedings of the ACL Workshop on Challenges \& Perspectives in Creating Large Language Models},
-  url={https://arxiv.org/abs/2204.06745},
-  year={2022}
+	title        = {{GPT-NeoX-20B}: An Open-Source Autoregressive Language Model},
+	author       = {Black, Sid and Biderman, Stella and Hallahan, Eric and Anthony, Quentin and Gao, Leo and Golding, Laurence and He, Horace and Leahy, Connor and McDonell, Kyle and Phang, Jason and Pieler, Michael and Prashanth, USVSN Sai and Purohit, Shivanshu and Reynolds, Laria and Tow, Jonathan and Wang, Ben and Weinbach, Samuel},
+	year         = 2022,
+	booktitle    = {Proceedings of the ACL Workshop on Challenges \& Perspectives in Creating Large Language Models},
+	url          = {https://arxiv.org/abs/2204.06745}
 }
-
 @inproceedings{reimers-2019-sentence-bert,
-    title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",
-    author = "Reimers, Nils and Gurevych, Iryna",
-    booktitle = "Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing",
-    month = "11",
-    year = "2019",
-    publisher = "Association for Computational Linguistics",
-    url = "http://arxiv.org/abs/1908.10084",
+	title        = {Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks},
+	author       = {Reimers, Nils and Gurevych, Iryna},
+	year         = 2019,
+	month        = 11,
+	booktitle    = {Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing},
+	publisher    = {Association for Computational Linguistics},
+	url          = {http://arxiv.org/abs/1908.10084}
 }
-
 @inproceedings{thakur-2020-AugSBERT,
-    title = "Augmented {SBERT}: Data Augmentation Method for Improving Bi-Encoders for Pairwise Sentence Scoring Tasks",
-    author = "Thakur, Nandan and Reimers, Nils and Daxenberger, Johannes  and Gurevych, Iryna",
-    booktitle = "Proceedings of the 2021 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies",
-    month = "6",
-    year = "2021",
-    address = "Online",
-    publisher = "Association for Computational Linguistics",
-    url = "https://arxiv.org/abs/2010.08240",
-    pages = "296--310",
+	title        = {Augmented {SBERT}: Data Augmentation Method for Improving Bi-Encoders for Pairwise Sentence Scoring Tasks},
+	author       = {Thakur, Nandan and Reimers, Nils and Daxenberger, Johannes  and Gurevych, Iryna},
+	year         = 2021,
+	month        = 6,
+	booktitle    = {Proceedings of the 2021 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies},
+	publisher    = {Association for Computational Linguistics},
+	address      = {Online},
+	pages        = {296--310},
+	url          = {https://arxiv.org/abs/2010.08240}
 }
-
 @misc{https://doi.org/10.48550/arxiv.1910.10683,
-  doi = {10.48550/ARXIV.1910.10683},
-  url = {https://arxiv.org/abs/1910.10683},
-  author = {Raffel, Colin and Shazeer, Noam and Roberts, Adam and Lee, Katherine and Narang, Sharan and Matena, Michael and Zhou, Yanqi and Li, Wei and Liu, Peter J.},
-  keywords = {Machine Learning (cs.LG), Computation and Language (cs.CL), Machine Learning (stat.ML), FOS: Computer and information sciences, FOS: Computer and information sciences},
-  title = {Exploring the Limits of Transfer Learning with a Unified Text-to-Text Transformer},
-  publisher = {arXiv},
-  year = {2019},
-  copyright = {arXiv.org perpetual, non-exclusive license}
+	title        = {Exploring the Limits of Transfer Learning with a Unified Text-to-Text Transformer},
+	author       = {Raffel, Colin and Shazeer, Noam and Roberts, Adam and Lee, Katherine and Narang, Sharan and Matena, Michael and Zhou, Yanqi and Li, Wei and Liu, Peter J.},
+	year         = 2019,
+	publisher    = {arXiv},
+	doi          = {10.48550/ARXIV.1910.10683},
+	url          = {https://arxiv.org/abs/1910.10683},
+	copyright    = {arXiv.org perpetual, non-exclusive license},
+	keywords     = {Machine Learning (cs.LG), Computation and Language (cs.CL), Machine Learning (stat.ML), FOS: Computer and information sciences, FOS: Computer and information sciences}
 }
-
 @inproceedings{nie-etal-2020-adversarial,
-    title = "Adversarial {NLI}: A New Benchmark for Natural Language Understanding",
-    author = "Nie, Yixin  and
-      Williams, Adina  and
-      Dinan, Emily  and
-      Bansal, Mohit  and
-      Weston, Jason  and
-      Kiela, Douwe",
-    booktitle = "Proceedings of the 58th Annual Meeting of the Association for Computational Linguistics",
-    year = "2020",
-    publisher = "Association for Computational Linguistics",
+	title        = {Adversarial {NLI}: A New Benchmark for Natural Language Understanding},
+	author       = {Nie, Yixin  and Williams, Adina  and Dinan, Emily  and Bansal, Mohit  and Weston, Jason  and Kiela, Douwe},
+	year         = 2020,
+	booktitle    = {Proceedings of the 58th Annual Meeting of the Association for Computational Linguistics},
+	publisher    = {Association for Computational Linguistics}
 }
-
-@InProceedings{N18-1101,
-  author = "Williams, Adina
-            and Nangia, Nikita
-            and Bowman, Samuel",
-  title = "A Broad-Coverage Challenge Corpus for 
-           Sentence Understanding through Inference",
-  booktitle = "Proceedings of the 2018 Conference of 
-               the North American Chapter of the 
-               Association for Computational Linguistics:
-               Human Language Technologies, Volume 1 (Long
-               Papers)",
-  year = "2018",
-  publisher = "Association for Computational Linguistics",
-  pages = "1112--1122",
-  location = "New Orleans, Louisiana",
-  url = "http://aclweb.org/anthology/N18-1101"
+@inproceedings{N18-1101,
+	title        = {A Broad-Coverage Challenge Corpus for Sentence Understanding through Inference},
+	author       = {Williams, Adina and Nangia, Nikita and Bowman, Samuel},
+	year         = 2018,
+	booktitle    = {Proceedings of the 2018 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies, Volume 1 (Long Papers)},
+	location     = {New Orleans, Louisiana},
+	publisher    = {Association for Computational Linguistics},
+	pages        = {1112--1122},
+	url          = {http://aclweb.org/anthology/N18-1101}
 }
-
 @article{DBLP:journals/corr/BowmanAPM15,
-  author    = {Samuel R. Bowman and
-               Gabor Angeli and
-               Christopher Potts and
-               Christopher D. Manning},
-  title     = {A large annotated corpus for learning natural language inference},
-  journal   = {CoRR},
-  volume    = {abs/1508.05326},
-  year      = {2015},
-  url       = {http://arxiv.org/abs/1508.05326},
-  eprinttype = {arXiv},
-  eprint    = {1508.05326},
-  timestamp = {Mon, 13 Aug 2018 16:46:27 +0200},
-  biburl    = {https://dblp.org/rec/journals/corr/BowmanAPM15.bib},
-  bibsource = {dblp computer science bibliography, https://dblp.org}
+	title        = {A large annotated corpus for learning natural language inference},
+	author       = {Samuel R. Bowman and Gabor Angeli and Christopher Potts and Christopher D. Manning},
+	year         = 2015,
+	journal      = {CoRR},
+	volume       = {abs/1508.05326},
+	url          = {http://arxiv.org/abs/1508.05326},
+	eprinttype   = {arXiv},
+	eprint       = {1508.05326},
+	timestamp    = {Mon, 13 Aug 2018 16:46:27 +0200},
+	biburl       = {https://dblp.org/rec/journals/corr/BowmanAPM15.bib},
+	bibsource    = {dblp computer science bibliography, https://dblp.org}
 }
-
 @article{DBLP:journals/corr/abs-1808-07042,
-  author    = {Siva Reddy and
-               Danqi Chen and
-               Christopher D. Manning},
-  title     = {CoQA: {A} Conversational Question Answering Challenge},
-  journal   = {CoRR},
-  volume    = {abs/1808.07042},
-  year      = {2018},
-  url       = {http://arxiv.org/abs/1808.07042},
-  eprinttype = {arXiv},
-  eprint    = {1808.07042},
-  timestamp = {Sun, 02 Sep 2018 15:01:56 +0200},
-  biburl    = {https://dblp.org/rec/journals/corr/abs-1808-07042.bib},
-  bibsource = {dblp computer science bibliography, https://dblp.org}
+	title        = {CoQA: {A} Conversational Question Answering Challenge},
+	author       = {Siva Reddy and Danqi Chen and Christopher D. Manning},
+	year         = 2018,
+	journal      = {CoRR},
+	volume       = {abs/1808.07042},
+	url          = {http://arxiv.org/abs/1808.07042},
+	eprinttype   = {arXiv},
+	eprint       = {1808.07042},
+	timestamp    = {Sun, 02 Sep 2018 15:01:56 +0200},
+	biburl       = {https://dblp.org/rec/journals/corr/abs-1808-07042.bib},
+	bibsource    = {dblp computer science bibliography, https://dblp.org}
 }
-
 @article{kwiatkowski-etal-2019-natural,
-    title = "Natural Questions: A Benchmark for Question Answering Research",
-    author = "Kwiatkowski, Tom  and
-      Palomaki, Jennimaria  and
-      Redfield, Olivia  and
-      Collins, Michael  and
-      Parikh, Ankur  and
-      Alberti, Chris  and
-      Epstein, Danielle  and
-      Polosukhin, Illia  and
-      Devlin, Jacob  and
-      Lee, Kenton  and
-      Toutanova, Kristina  and
-      Jones, Llion  and
-      Kelcey, Matthew  and
-      Chang, Ming-Wei  and
-      Dai, Andrew M.  and
-      Uszkoreit, Jakob  and
-      Le, Quoc  and
-      Petrov, Slav",
-    journal = "Transactions of the Association for Computational Linguistics",
-    volume = "7",
-    year = "2019",
-    address = "Cambridge, MA",
-    publisher = "MIT Press",
-    url = "https://aclanthology.org/Q19-1026",
-    doi = "10.1162/tacl_a_00276",
-    pages = "452--466",
-    abstract = "We present the Natural Questions corpus, a question answering data set. Questions consist of real anonymized, aggregated queries issued to the Google search engine. An annotator is presented with a question along with a Wikipedia page from the top 5 search results, and annotates a long answer (typically a paragraph) and a short answer (one or more entities) if present on the page, or marks null if no long/short answer is present. The public release consists of 307,373 training examples with single annotations; 7,830 examples with 5-way annotations for development data; and a further 7,842 examples with 5-way annotated sequestered as test data. We present experiments validating quality of the data. We also describe analysis of 25-way annotations on 302 examples, giving insights into human variability on the annotation task. We introduce robust metrics for the purposes of evaluating question answering systems; demonstrate high human upper bounds on these metrics; and establish baseline results using competitive methods drawn from related literature.",
+	title        = {Natural Questions: A Benchmark for Question Answering Research},
+	author       = {Kwiatkowski, Tom  and Palomaki, Jennimaria  and Redfield, Olivia  and Collins, Michael  and Parikh, Ankur  and Alberti, Chris  and Epstein, Danielle  and Polosukhin, Illia  and Devlin, Jacob  and Lee, Kenton  and Toutanova, Kristina  and Jones, Llion  and Kelcey, Matthew  and Chang, Ming-Wei  and Dai, Andrew M.  and Uszkoreit, Jakob  and Le, Quoc  and Petrov, Slav},
+	year         = 2019,
+	journal      = {Transactions of the Association for Computational Linguistics},
+	publisher    = {MIT Press},
+	address      = {Cambridge, MA},
+	volume       = 7,
+	pages        = {452--466},
+	doi          = {10.1162/tacl_a_00276},
+	url          = {https://aclanthology.org/Q19-1026},
+	abstract     = {We present the Natural Questions corpus, a question answering data set. Questions consist of real anonymized, aggregated queries issued to the Google search engine. An annotator is presented with a question along with a Wikipedia page from the top 5 search results, and annotates a long answer (typically a paragraph) and a short answer (one or more entities) if present on the page, or marks null if no long/short answer is present. The public release consists of 307,373 training examples with single annotations; 7,830 examples with 5-way annotations for development data; and a further 7,842 examples with 5-way annotated sequestered as test data. We present experiments validating quality of the data. We also describe analysis of 25-way annotations on 302 examples, giving insights into human variability on the annotation task. We introduce robust metrics for the purposes of evaluating question answering systems; demonstrate high human upper bounds on these metrics; and establish baseline results using competitive methods drawn from related literature.}
 }
-
 @article{DBLP:journals/corr/abs-1806-03822,
-  author    = {Pranav Rajpurkar and
-               Robin Jia and
-               Percy Liang},
-  title     = {Know What You Don't Know: Unanswerable Questions for SQuAD},
-  journal   = {CoRR},
-  volume    = {abs/1806.03822},
-  year      = {2018},
-  url       = {http://arxiv.org/abs/1806.03822},
-  eprinttype = {arXiv},
-  eprint    = {1806.03822},
-  timestamp = {Mon, 13 Aug 2018 16:48:21 +0200},
-  biburl    = {https://dblp.org/rec/journals/corr/abs-1806-03822.bib},
-  bibsource = {dblp computer science bibliography, https://dblp.org}
+	title        = {Know What You Don't Know: Unanswerable Questions for SQuAD},
+	author       = {Pranav Rajpurkar and Robin Jia and Percy Liang},
+	year         = 2018,
+	journal      = {CoRR},
+	volume       = {abs/1806.03822},
+	url          = {http://arxiv.org/abs/1806.03822},
+	eprinttype   = {arXiv},
+	eprint       = {1806.03822},
+	timestamp    = {Mon, 13 Aug 2018 16:48:21 +0200},
+	biburl       = {https://dblp.org/rec/journals/corr/abs-1806-03822.bib},
+	bibsource    = {dblp computer science bibliography, https://dblp.org}
+}
+@misc{the-gpt-3-architecture-on-a-napkin,
+	title        = {How deep is the machine?},
+	journal      = {The GPT-3 Architecture, on a Napkin},
+	url          = {https://dugas.ch/artificial_curiosity/GPT_architecture.html}
+}
+@misc{gpt3-overview,
+	url          = {https://dzlab.github.io/ml/2020/07/25/gpt3-overview/},
+	journal      = {GPT-3 An Overview},
+	author       = {Dzlab}
+}
+@misc{alammar,
+	title        = {The illustrated transformer},
+	url          = {https://jalammar.github.io/illustrated-transformer/},
+	journal      = {The Illustrated Transformer  Jay Alammar  Visualizing machine learning one concept at a time.},
+	author       = {Alammar, Jay}
 }
