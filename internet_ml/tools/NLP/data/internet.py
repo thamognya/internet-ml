@@ -59,3 +59,5 @@ def fetch_content(urls: list[str]):
 a = google_urls("Who is Neil Armstrong", [])
 print(a)
 print(fetch_content(a))
+
+# TODO: fix and finish this
