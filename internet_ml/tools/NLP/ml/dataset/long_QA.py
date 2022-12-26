@@ -1,11 +1,7 @@
-import datasets
+# type: ignore
 from typing import Any
+
+import datasets
 
 CoQA: Any = datasets.load_dataset("coqa")
 DATASET: List[Any] = []
-
-def coqa():
-    global CoQA, DATASET
-    for story in CoQA["train"]:
-        for question, answer in story["questions"], story["answers"]:
-            

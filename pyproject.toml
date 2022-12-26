@@ -46,6 +46,8 @@ timm = "^0.6.12"
 torchvision = "^0.14.1"
 torchaudio = "^0.13.1"
 python-dotenv = "^0.21.0"
+requests = "^2.28.1"
+types-requests = "^2.28.11.7"
 
 [tool.poetry.group.dev.dependencies]
 bandit = "^1.7.4"

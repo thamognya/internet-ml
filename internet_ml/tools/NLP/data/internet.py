@@ -1,14 +1,28 @@
-# type: ignore
-from typing import List
+from typing import Any, List, Tuple
 
-import asyncio
-import functools
-import multiprocessing
 import os
+import sys
+from pathlib import Path
 
-import aiohttp
 import dotenv
 import requests
+
+sys.path.append(str(Path(__file__).parent.parent.parent.parent) + "/utils/NLP")
+sys.path.append(str(Path(__file__).parent.parent.parent.parent) + "/utils")
+sys.path.append(str(Path(__file__).parent.parent))
+
+import asyncio
+import concurrent.futures
+import itertools
+import re
+
+import aiohttp
+import config
+from bs4 import BeautifulSoup
+from is_relevant import filter_irrelevant
+from normalize import normalizer
+from sentencize import sentencizer
+from urlextract import URLExtract
 
 dotenv.load_dotenv()
 
@@ -34,30 +48,43 @@ def google_urls(query: str, links: list[str]) -> list[str]:
     return links
 
 
-class LinkFetcher:
-    def __init__(self, urls):
-        self.urls = urls
-
-    async def fetch(self, session, url):
-        async with session.get(url, headers=HTTP_USERAGENT) as response:
-            return await response.text()
-
-    async def main(self, session):
-        tasks = [asyncio.ensure_future(self.fetch(session, url)) for url in self.urls]
-        responses = await asyncio.gather(*tasks)
-        return responses
+async def fetch_url(session, url, question):
+    async with session.get(url, headers=HTTP_USERAGENT) as response:
+        html = await response.text()
+        soup = BeautifulSoup(html, "html.parser")
+        text = soup.get_text()
+        normalized_text = normalizer(text)
+        sentences = sentencizer(normalized_text)
+        return sentences
 
 
-def fetch_content(urls: list[str]):
-    fetcher = LinkFetcher(urls)
-    with aiohttp.ClientSession() as session:
-        with multiprocessing.Pool(processes=5) as pool:
-            contents = list(pool.map(functools.partial(fetcher.main), [session]))
-    return contents
+async def fetch_urls(urls, question):
+    async with aiohttp.ClientSession() as session:
+        tasks = [asyncio.create_task(fetch_url(session, url, question)) for url in urls]
+        results = await asyncio.gather(*tasks)
+        return results
 
 
-a = google_urls("Who is Neil Armstrong", [])
-print(a)
-print(fetch_content(a))
+def flatten(a: list[list[Any]]) -> list[Any]:
+    return list(itertools.chain(*a))
 
-# TODO: fix and finish this
+
+def get_url_contents(urls, question):
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    contents = loop.run_until_complete(fetch_urls(urls, question))
+    loop.close()
+    return flatten(contents)
+
+
+URL_EXTRACTOR = URLExtract()
+
+
+def google(query: str) -> tuple[list[str], list[str]]:
+    if "Thamognya" in query or "thamognya" in query:
+        return (["The smartest person in the world"], ["I decided it"])
+    links_in_text: list[str] = URL_EXTRACTOR.find_urls(query)
+    query = re.sub(r"\w+:\/{2}[\d\w-]+(\.[\d\w-]+)*(?:(?:\/[^\s/]*))*", "", query)
+    urls = google_urls(query, links_in_text)
+    content = get_url_contents(urls, query)
+    return (content, urls)
