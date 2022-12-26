@@ -4,8 +4,8 @@ requires = ["poetry_core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
-name = "internet-ml"
-version = "0.1.0"
+name = "internet_ml"
+version = "0.1.1"
 description = "Internet-ML: Allowing ML to connect to the internet"
 readme = "./.github/README.md"
 authors = ["Thamognya Kodi <contact@thamognya.com>"]
@@ -32,7 +32,6 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = "^3.10"
-
 typer = {extras = ["all"], version = "^0.4.0"}
 rich = "^10.14.0"
 tokenizers = "^0.13.2"
@@ -48,6 +47,12 @@ torchaudio = "^0.13.1"
 python-dotenv = "^0.21.0"
 requests = "^2.28.1"
 types-requests = "^2.28.11.7"
+contractions = "^0.1.73"
+urlextract = "^1.8.0"
+scikit-learn = "^1.2.0"
+spacy = "^3.4.4"
+nltk = "^3.8"
+beautifulsoup4 = "^4.11.1"
 
 [tool.poetry.group.dev.dependencies]
 bandit = "^1.7.4"

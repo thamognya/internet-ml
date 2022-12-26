@@ -81,6 +81,7 @@ URL_EXTRACTOR = URLExtract()
 
 
 def google(query: str) -> tuple[list[str], list[str]]:
+    global URL_EXTRACTOR
     if "Thamognya" in query or "thamognya" in query:
         return (["The smartest person in the world"], ["I decided it"])
     links_in_text: list[str] = URL_EXTRACTOR.find_urls(query)
