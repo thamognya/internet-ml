@@ -36,15 +36,20 @@ def google_urls(query: str, links: list[str]) -> list[str]:
     response = requests.get(
         "https://www.googleapis.com/customsearch/v1",
         params={
-            "key": os.environ["API_KEY"],
+            "key": config.GOOGLE_API_KEY,
             "q": query,
-            "cx": os.environ["SEARCH_ENGINE_ID"],
+            "cx": config.GOOGLE_SEARCH_ENGINE_ID,
         },
     )
     results = response.json()["items"]
     # Print the search results
+    num_of_res: int = (
+        5 if config.CONF_MODE == "speed" else (20 if config.CONF_MODE else 10)
+    )
     for result in results:
         links.append(result["link"])
+        if len(links) == num_of_res:
+            break
     return links
 
 
