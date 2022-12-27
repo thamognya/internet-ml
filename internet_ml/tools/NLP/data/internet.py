@@ -41,12 +41,14 @@ HTTP_USERAGENT: dict[str, str] = {
 }
 
 
-def google_urls(query: str, links: list[str]) -> list[str]:
+def google_urls(
+    query: str, links: list[str], GOOGLE_API_KEY: str, GOOGLE_SEARCH_ENGINE_ID: str
+) -> list[str]:
     try:
         # Send the request to the Google Search API
-        if config.GOOGLE_API_KEY == "":
+        if GOOGLE_API_KEY == "":
             exit("ERROR: Google API Key not found")
-        if config.GOOGLE_SEARCH_ENGINE_ID == "":
+        if GOOGLE_SEARCH_ENGINE_ID == "":
             exit("ERROR: Google Search Engine Id not found")
         response = requests.get(
             "https://www.googleapis.com/customsearch/v1",
@@ -119,7 +121,9 @@ def get_url_contents(urls: list[str], question: str) -> list[str]:
 URL_EXTRACTOR: URLExtract = URLExtract()
 
 
-def google(query: str) -> tuple[list[str], list[str]]:
+def google(
+    query: str, API_KEY: str, SEARCH_ENGINE_ID: str
+) -> tuple[list[str], list[str]]:
     reload(config)
     global URL_EXTRACTOR
     # Hard coded exceptions - START
@@ -144,7 +148,12 @@ def google(query: str) -> tuple[list[str], list[str]]:
     # Hard coded exceptions - END
     links_in_text: list[str] = URL_EXTRACTOR.find_urls(query)
     query = re.sub(r"\w+:\/{2}[\d\w-]+(\.[\d\w-]+)*(?:(?:\/[^\s/]*))*", "", query)
-    urls = google_urls(query, links_in_text)
+    urls = google_urls(
+        query,
+        links_in_text,
+        GOOGLE_API_KEY=API_KEY,
+        GOOGLE_SEARCH_ENGINE_ID=SEARCH_ENGINE_ID,
+    )
     content = get_url_contents(urls, query)
     if config.CONF_DEBUG:
         logging.info(f"Urls: {urls}")
