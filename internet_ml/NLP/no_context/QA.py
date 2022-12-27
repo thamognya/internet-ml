@@ -21,15 +21,9 @@ import internet
 QA_MODEL: Any = pipeline("question-answering")
 
 
-def answer(
-    query: str,
-    GOOGLE_API_KEY: str = config.GOOGLE_API_KEY,
-    GOOGLE_SEARCH_ENGINE_ID: str = config.GOOGLE_SEARCH_ENGINE_ID,
-) -> tuple[Any, list[str]]:
+def answer(query: str) -> tuple[Any, list[str]]:
     global QA_MODEL
-    results: tuple[list[str], list[str]] = internet.google(
-        query, GOOGLE_API_KEY, GOOGLE_SEARCH_ENGINE_ID
-    )
+    results: tuple[list[str], list[str]] = internet.google(query)
     answer: tuple[Any, list[str]] = (
         QA_MODEL(question=query, context=str(results[0])),
         results[1],
@@ -38,5 +32,7 @@ def answer(
         logging.info(f"Answer: {answer}")
     return answer
 
+
+print(answer("Who is Rishi Sunack"))
 
 # def custom_answer

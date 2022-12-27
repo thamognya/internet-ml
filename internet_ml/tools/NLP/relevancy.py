@@ -27,10 +27,10 @@ logging.basicConfig(
     format="%(name)s - %(levelname)s - %(message)s",
 )
 
-nltk.download("punkt")
-nltk.download("stopwords")
-nltk.download("wordnet")
-nltk.download("omw-1.4")
+nltk.download("punkt", quiet=True)
+nltk.download("stopwords", quiet=True)
+nltk.download("wordnet", quiet=True)
+nltk.download("omw-1.4", quiet=True)
 
 nlp = spacy.load("en_core_web_sm")  # Load the English language model
 lemmatizer = WordNetLemmatizer()  # Initialize the WordNet lemmatizer

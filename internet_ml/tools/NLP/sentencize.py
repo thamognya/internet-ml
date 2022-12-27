@@ -21,10 +21,7 @@ import concurrent.futures
 import config
 import nltk
 
-try:
-    nltk.data.find("words")
-except LookupError:
-    nltk.download("words")
+nltk.download("words", quiet=True)
 
 ENGLISH_WORDS: Any = set(nltk.corpus.words.words())
 

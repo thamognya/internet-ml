@@ -41,124 +41,130 @@ HTTP_USERAGENT: dict[str, str] = {
 }
 
 
-def google_urls(
-    query: str, links: list[str], GOOGLE_API_KEY: str, GOOGLE_SEARCH_ENGINE_ID: str
-) -> list[str]:
-    try:
-        # Send the request to the Google Search API
-        if GOOGLE_API_KEY == "":
-            exit("ERROR: Google API Key not found")
-        if GOOGLE_SEARCH_ENGINE_ID == "":
-            exit("ERROR: Google Search Engine Id not found")
-        response = requests.get(
-            "https://www.googleapis.com/customsearch/v1",
-            params={
-                "key": config.GOOGLE_API_KEY,
-                "q": query,
-                "cx": config.GOOGLE_SEARCH_ENGINE_ID,
-            },
-        )
-        results = response.json()["items"]
-        # Print the search results
-        num_of_res: int = (
+class Google:
+    def __init__(self: Any, query: str) -> None:
+        self.GOOGLE_SEARCH_API_KEY: str = ""
+        self.GOOGLE_SEARCH_ENGINE_ID: str = ""
+        self.__num_res: int = (
             5
             if config.NLP_CONF_MODE == "speed"
             else (20 if config.NLP_CONF_MODE else 10)
         )
+        self.__query = query
+        self.__URL_EXTRACTOR: URLExtract = URLExtract()
+        self.__urls: list[str] = self.__URL_EXTRACTOR.find_urls(query)
+        self.__query = re.sub(
+            r"\w+:\/{2}[\d\w-]+(\.[\d\w-]+)*(?:(?:\/[^\s/]*))*", "", self.__query
+        )
+
+    @property
+    def google_search_api_key(self: Any) -> str:
+        val: str = self.GOOGLE_SEARCH_API_KEY
+        return val
+
+    @google_search_api_key.setter
+    def google_search_api_key(self: Any, val: str) -> None:
+        self.GOOGLE_SEARCH_API_KEY = val
+
+    @property
+    def google_search_engine_id(self: Any) -> str:
+        val: str = self.GOOGLE_SEARCH_ENGINE_ID
+        return val
+
+    @google_search_engine_id.setter
+    def google_search_engine_id(self: Any, val: str) -> None:
+        self.GOOGLE_SEARCH_ENGINE_ID = val
+
+    def __get_urls(self: Any) -> None:
+        # Send the request to the Google Search API
+        if self.GOOGLE_SEARCH_API_KEY == "":
+            exit("ERROR: Google API Key not found")
+        if self.GOOGLE_SEARCH_ENGINE_ID == "":
+            exit("ERROR: Google Search Engine Id not found")
+        response = requests.get(
+            "https://www.googleapis.com/customsearch/v1",
+            params={
+                "key": self.GOOGLE_SEARCH_API_KEY,
+                "q": self.__query,
+                "cx": self.GOOGLE_SEARCH_ENGINE_ID,
+            },
+        )
+        results = response.json()["items"]
         for result in results:
-            links.append(result["link"])
-            if len(links) == num_of_res:
+            self.__urls.append(result["link"])
+            if len(self.__urls) == self.__num_res:
                 break
         if config.CONF_DEBUG:
-            logging.info(f"Links: {links}")
-        return links
-    except Exception:
-        if config.CONF_DEBUG:
-            logging.info(f"Error: {Exception}")
-        exit(
-            f"There is an unknown excpetion: {Exception}. Since no links are scraped, nothing futher can continue. Please report it at https://github.com/thamognya/internet_ml/issues or mail me at contact@thamognya.com"
-        )
+            logging.info(f"Links: {self.__urls}")
 
-
-async def fetch_url(session: Any, url: str, question: Any) -> list[str]:
-    try:
-        async with session.get(url, headers=HTTP_USERAGENT) as response:
-            html = await response.text()
-            soup = BeautifulSoup(html, "html.parser")
-            text = soup.get_text()
-            normalized_text = normalizer(text)
-            sentences: list[str] = sentencizer(normalized_text)
+    async def __fetch_url(self: Any, session: Any, url: str) -> list[str]:
+        try:
+            async with session.get(url, headers=HTTP_USERAGENT) as response:
+                html = await response.text()
+                soup = BeautifulSoup(html, "html.parser")
+                text = soup.get_text()
+                normalized_text = normalizer(text)
+                sentences: list[str] = sentencizer(normalized_text)
+                if config.CONF_DEBUG:
+                    logging.info(f"Sentences: {sentences}")
+                return sentences
+        except aiohttp.ClientConnectorError:
             if config.CONF_DEBUG:
-                logging.info(f"Sentences: {sentences}")
-            return sentences
-    except aiohttp.ClientConnectorError:
-        if config.CONF_DEBUG:
-            logging.info(f"ClientConnector Error: Likely a connection issue with wifi")
-        return [""]
-    except Exception:
-        return [""]
+                logging.info(
+                    f"ClientConnector Error: Likely a connection issue with wifi"
+                )
+            return [""]
+        except Exception:
+            return [""]
+
+    async def __fetch_urls(self: Any, urls: list[str]) -> Any:
+        async with aiohttp.ClientSession() as session:
+            tasks = [
+                asyncio.create_task(self.__fetch_url(session, url)) for url in urls
+            ]
+            results = await asyncio.gather(*tasks)
+            return results
+
+    def __flatten(self: Any, a: list[list[Any]]) -> list[Any]:
+        return list(itertools.chain(*a))
+
+    def __get_urls_contents(self: Any) -> None:
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        contents = loop.run_until_complete(self.__fetch_urls(self.__urls))
+        loop.close()
+        self.__content = self.__flatten(contents)
+
+    def google(self: Any) -> tuple[list[str], list[str]]:
+        # Hard coded exceptions - START
+        if "Thamognya" in self.__query or "thamognya" in self.__query:
+            return (["The smartest person in the world"], ["I decided it"])
+        if "modi" in self.__query or "Modi" in self.__query:
+            return (
+                ["Prime Minister of India"],
+                [
+                    "https://www.narendramodi.in/",
+                    "https://en.wikipedia.org/wiki/Narendra_Modi",
+                    "https://twitter.com/narendramodi?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor",
+                    "https://www.instagram.com/narendramodi/?hl=en",
+                    "https://www.facebook.com/narendramodi/",
+                    "http://www.pmindia.gov.in/en/",
+                    "https://timesofindia.indiatimes.com/topic/Narendra-Modi",
+                    "https://www.britannica.com/biography/Narendra-Modi",
+                    "https://indianexpress.com/article/india/zelenskky-dials-pm-modi-wishes-new-delhi-successful-g20-presidency-8345365/",
+                    "https://economictimes.indiatimes.com/news/narendra-modi",
+                ],
+            )
+        self.__get_urls()
+        self.__get_urls_contents()
+        return (self.__content, self.__urls)
 
 
-async def fetch_urls(urls: list[str], question: str) -> Any:
-    async with aiohttp.ClientSession() as session:
-        tasks = [asyncio.create_task(fetch_url(session, url, question)) for url in urls]
-        results = await asyncio.gather(*tasks)
-        return results
-
-
-def flatten(a: list[list[Any]]) -> list[Any]:
-    return list(itertools.chain(*a))
-
-
-def get_url_contents(urls: list[str], question: str) -> list[str]:
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    contents = loop.run_until_complete(fetch_urls(urls, question))
-    loop.close()
-    return flatten(contents)
-
-
-URL_EXTRACTOR: URLExtract = URLExtract()
-
-
-def google(
-    query: str, API_KEY: str, SEARCH_ENGINE_ID: str
-) -> tuple[list[str], list[str]]:
-    reload(config)
-    global URL_EXTRACTOR
-    # Hard coded exceptions - START
-    if "Thamognya" in query or "thamognya" in query:
-        return (["The smartest person in the world"], ["I decided it"])
-    if "modi" in query or "Modi" in query:
-        return (
-            ["Prime Minister of India"],
-            [
-                "https://www.narendramodi.in/",
-                "https://en.wikipedia.org/wiki/Narendra_Modi",
-                "https://twitter.com/narendramodi?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor",
-                "https://www.instagram.com/narendramodi/?hl=en",
-                "https://www.facebook.com/narendramodi/",
-                "http://www.pmindia.gov.in/en/",
-                "https://timesofindia.indiatimes.com/topic/Narendra-Modi",
-                "https://www.britannica.com/biography/Narendra-Modi",
-                "https://indianexpress.com/article/india/zelenskky-dials-pm-modi-wishes-new-delhi-successful-g20-presidency-8345365/",
-                "https://economictimes.indiatimes.com/news/narendra-modi",
-            ],
-        )
-    # Hard coded exceptions - END
-    links_in_text: list[str] = URL_EXTRACTOR.find_urls(query)
-    query = re.sub(r"\w+:\/{2}[\d\w-]+(\.[\d\w-]+)*(?:(?:\/[^\s/]*))*", "", query)
-    urls = google_urls(
-        query,
-        links_in_text,
-        GOOGLE_API_KEY=API_KEY,
-        GOOGLE_SEARCH_ENGINE_ID=SEARCH_ENGINE_ID,
-    )
-    content = get_url_contents(urls, query)
-    if config.CONF_DEBUG:
-        logging.info(f"Urls: {urls}")
-        logging.info(f"Content: {content}")
-    return (content, urls)
+def google(query: str) -> tuple[list[str], list[str]]:
+    _google = Google(query)
+    _google.google_search_api_key = config.GET_GOOGLE_API_CONFIG()[0]
+    _google.google_search_engine_id = config.GET_GOOGLE_API_CONFIG()[1]
+    return _google.google()
 
 
 """
