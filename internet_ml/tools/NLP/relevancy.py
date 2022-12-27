@@ -1,6 +1,9 @@
 from typing import Any
 
 import concurrent.futures
+import logging
+import sys
+from pathlib import Path
 
 import nltk
 import numpy as np
@@ -11,6 +14,18 @@ from nltk.tokenize import word_tokenize
 
 # from scipy.spatial.distance import jaccard
 from sklearn.feature_extraction.text import TfidfVectorizer
+
+sys.path.append(str(Path(__file__).parent.parent.parent.parent) + "/utils/NLP")
+sys.path.append(str(Path(__file__).parent.parent.parent.parent) + "/utils")
+
+import config
+
+logging.basicConfig(
+    filename="relevancy.log",
+    filemode="w",
+    level=logging.INFO,
+    format="%(name)s - %(levelname)s - %(message)s",
+)
 
 nltk.download("punkt")
 nltk.download("stopwords")
@@ -64,10 +79,25 @@ def is_answer(sentence: str, question: str, threshold: float = 0.3) -> bool:
     answer: bool
     if main_verb is None:
         answer = similarity >= threshold
-        return answer
     else:
         answer = main_verb in sentence_tokens and similarity >= threshold
-        return answer
+    if config.CONF_DEBUG:
+        logging.info(
+            f"Is Relevant -> Sentence: {sentence}, Question: {question} -> Relevancy: {answer}"
+        )
+    return answer
+
+
+def filter_irrelevant(sentences: list[str], question: str) -> list[str]:
+    # Create a list to store the relevant sentences
+    relevant_sentences = []
+    for sentence in sentences:
+        if is_answer(sentence, question):
+            relevant_sentences.append(sentence)
+            print(sentence)
+    if config.CONF_DEBUG:
+        logging.info(f"Relevant Sentences: {relevant_sentences}")
+    return relevant_sentences
 
 
 # # Test the is_answer function
@@ -81,15 +111,15 @@ def is_answer(sentence: str, question: str, threshold: float = 0.3) -> bool:
 # from concurrent.futures import ThreadPoolExecutor
 # import concurrent.futures
 
-
-def filter_irrelevant(sentences: list[str], question: str) -> list[str]:
-    # Create a list to store the relevant sentences
-    relevant_sentences = []
-    for sentence in sentences:
-        if is_answer(sentence, question):
-            relevant_sentences.append(sentence)
-            print(sentence)
-    return relevant_sentences
-
-
-# print(filter_irrelevant_(["Neil Armstrong is an American Astronaut", "Neil Armstrong is dead", "Neil Armstrng is fake"], "Who is Neil Armstrong?"))
+"""
+print(
+    filter_irrelevant(
+        [
+            "Neil Armstrong is an American Astronaut",
+            "Neil Armstrong is dead",
+            "Neil Armstrng is fake",
+        ],
+        "Who is Neil Armstrong?",
+    )
+)
+"""

@@ -67,7 +67,7 @@ def normalizer(text: str) -> str:
         .replace("               ", " ")
     )
     text = remove_non_ascii(text)
-    if config.NLP_CONF_DEBUG:
+    if config.CONF_DEBUG:
         logging.info(text)
     return text
 
@@ -81,4 +81,6 @@ def normalize_sentences(sentences: list[str]) -> list[str]:
         ):
             if future.result():
                 normalized_sentences.append(sentence)
+    if config.CONF_DEBUG:
+        logging.info(f"Normalized Sentences: {normalize_sentences}")
     return normalized_sentences

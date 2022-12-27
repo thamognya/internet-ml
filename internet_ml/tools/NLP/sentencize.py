@@ -1,4 +1,4 @@
-from typing import List
+from typing import Any, List
 
 import logging
 
@@ -26,7 +26,7 @@ try:
 except LookupError:
     nltk.download("words")
 
-ENGLISH_WORDS = set(nltk.corpus.words.words())
+ENGLISH_WORDS: Any = set(nltk.corpus.words.words())
 
 
 def convert_to_english(text: str) -> str:
@@ -54,7 +54,7 @@ def sentencizer(text: str) -> list[str]:
         for future in concurrent.futures.as_completed(futures):
             english_sentences.append(future.result())
 
-    if config.NLP_CONF_DEBUG:
+    if config.CONF_DEBUG:
         logging.info(f"sentences: {english_sentences}")
     return english_sentences
 
