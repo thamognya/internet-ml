@@ -32,6 +32,16 @@ def GET_GOOGLE_API_CONFIG() -> tuple[str, str]:
     return (GOOGLE_API_KEY, GOOGLE_SEARCH_ENGINE_ID)
 
 
+# TODO: work in progress
+# class GoogleAPI:
+#     def __init__(self) -> None:
+#         self.GOOGLE_SEARCH_API_KEY: str = ""
+#         self.GOOGLE_SEARCH_ENGINE_ID: str = ""
+
+#     @property
+#     def google_search_api_key
+
+
 def NLP_config(mode: str = "default", debug: bool = True) -> None:
     global NLP_CONF_MODE, CONF_DEBUG
     CONF_DEBUG = debug

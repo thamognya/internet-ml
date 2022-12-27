@@ -33,6 +33,6 @@ def answer(query: str) -> tuple[Any, list[str]]:
     return answer
 
 
-print(answer("Who is Rishi Sunack"))
+# print(answer("Who is the author of TinTin?"))
 
 # def custom_answer
