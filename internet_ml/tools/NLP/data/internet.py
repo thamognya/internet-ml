@@ -3,6 +3,7 @@ from typing import Any, List, Tuple
 import logging
 import os
 import sys
+from importlib import reload
 from pathlib import Path
 
 import dotenv
@@ -119,6 +120,7 @@ URL_EXTRACTOR: URLExtract = URLExtract()
 
 
 def google(query: str) -> tuple[list[str], list[str]]:
+    reload(config)
     global URL_EXTRACTOR
     # Hard coded exceptions - START
     if "Thamognya" in query or "thamognya" in query:
