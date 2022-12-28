@@ -4,7 +4,7 @@ requires = ["poetry_core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
-name = "internet_ml"
+name = "internet-ml"
 version = "0.2.11"
 description = "Internet-ML: Allowing ML to connect to the internet"
 readme = "./.github/README.md"
