@@ -42,9 +42,11 @@ HTTP_USERAGENT: dict[str, str] = {
 
 
 class Google:
-    def __init__(self: Any, query: str) -> None:
-        self.GOOGLE_SEARCH_API_KEY: str = ""
-        self.GOOGLE_SEARCH_ENGINE_ID: str = ""
+    def __init__(
+        self: Any, query: str, GOOGLE_SEARCH_API_KEY: str, GOOGLE_SEARCH_ENGINE_ID: str
+    ) -> None:
+        self.__GOOGLE_SEARCH_API_KEY: str = GOOGLE_SEARCH_API_KEY
+        self.__GOOGLE_SEARCH_ENGINE_ID: str = GOOGLE_SEARCH_ENGINE_ID
         self.__num_res: int = (
             5
             if config.NLP_CONF_MODE == "speed"
@@ -57,36 +59,18 @@ class Google:
             r"\w+:\/{2}[\d\w-]+(\.[\d\w-]+)*(?:(?:\/[^\s/]*))*", "", self.__query
         )
 
-    @property
-    def google_search_api_key(self: Any) -> str:
-        val: str = self.GOOGLE_SEARCH_API_KEY
-        return val
-
-    @google_search_api_key.setter
-    def google_search_api_key(self: Any, val: str) -> None:
-        self.GOOGLE_SEARCH_API_KEY = val
-
-    @property
-    def google_search_engine_id(self: Any) -> str:
-        val: str = self.GOOGLE_SEARCH_ENGINE_ID
-        return val
-
-    @google_search_engine_id.setter
-    def google_search_engine_id(self: Any, val: str) -> None:
-        self.GOOGLE_SEARCH_ENGINE_ID = val
-
     def __get_urls(self: Any) -> None:
         # Send the request to the Google Search API
-        if self.GOOGLE_SEARCH_API_KEY == "":
+        if self.__GOOGLE_SEARCH_API_KEY == "":
             exit("ERROR: Google API Key not found")
-        if self.GOOGLE_SEARCH_ENGINE_ID == "":
+        if self.__GOOGLE_SEARCH_ENGINE_ID == "":
             exit("ERROR: Google Search Engine Id not found")
         response = requests.get(
             "https://www.googleapis.com/customsearch/v1",
             params={
-                "key": self.GOOGLE_SEARCH_API_KEY,
+                "key": self.__GOOGLE_SEARCH_API_KEY,
                 "q": self.__query,
-                "cx": self.GOOGLE_SEARCH_ENGINE_ID,
+                "cx": self.__GOOGLE_SEARCH_ENGINE_ID,
             },
         )
         results = response.json()["items"]
@@ -161,9 +145,11 @@ class Google:
 
 
 def google(query: str) -> tuple[list[str], list[str]]:
-    _google = Google(query)
-    _google.google_search_api_key = config.GET_GOOGLE_API_CONFIG()[0]
-    _google.google_search_engine_id = config.GET_GOOGLE_API_CONFIG()[1]
+    _google = Google(
+        query,
+        os.environ["INTERNET_ML_GOOGLE_API"],
+        os.environ["INTERNET_ML_GOOGLE_SEARCH_ENGINE_ID"],
+    )
     return _google.google()
 
 

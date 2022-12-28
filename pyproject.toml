@@ -5,7 +5,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "internet_ml"
-version = "0.2.0"
+version = "0.2.11"
 description = "Internet-ML: Allowing ML to connect to the internet"
 readme = "./.github/README.md"
 authors = ["Thamognya Kodi <contact@thamognya.com>"]
@@ -40,7 +40,6 @@ numpy = "^1.24.0"
 torch = "^1.13.1"
 datasets = "^2.8.0"
 accelerate = "^0.15.0"
-diffusers = {extras = ["torch"], version = "^0.11.1"}
 timm = "^0.6.12"
 torchvision = "^0.14.1"
 torchaudio = "^0.13.1"
@@ -53,6 +52,7 @@ scikit-learn = "^1.2.0"
 spacy = "^3.4.4"
 nltk = "^3.8"
 beautifulsoup4 = "^4.11.1"
+diffusers = "^0.11.1"
 
 [tool.poetry.group.dev.dependencies]
 bandit = "^1.7.4"

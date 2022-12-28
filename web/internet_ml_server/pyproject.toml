@@ -1,0 +1,24 @@
+[build-system]
+requires = ["poetry_core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "internet-ml-server"
+version = "0.1.0"
+description = ""
+authors = ["Thamognya Kodi <contact@thamognya.com>"]
+readme = "README.md"
+packages = [{include = "internet_ml_server"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+django = "^4.1.4"
+internet-ml = "^0.2.11"
+django-stubs = "^1.13.1"
+djangorestframework = "^3.14.0"
+
+[tool.mypy]
+plugins = ["mypy_django_plugin.main"]
+
+[tool.django-stubs]
+django_settings_module = "myproject.settings"
