@@ -13,9 +13,9 @@ packages = [{include = "internet_ml_server"}]
 [tool.poetry.dependencies]
 python = "^3.10"
 django = "^4.1.4"
-internet-ml = "^0.2.11"
 django-stubs = "^1.13.1"
 djangorestframework = "^3.14.0"
+python-dotenv = "^0.21.0"
 
 [tool.mypy]
 plugins = ["mypy_django_plugin.main"]

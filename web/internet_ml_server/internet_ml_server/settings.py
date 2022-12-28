@@ -40,9 +40,12 @@ INSTALLED_APPS: list[str] = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+    "internet_ml",
     "api",
     "api.question_answer",
 ]
+
+REST_FRAMEWORK = {"DEFAULT_METADATA_CLASS": "rest_framework.metadata.SimpleMetadata"}
 
 MIDDLEWARE: list[str] = [
     "django.middleware.security.SecurityMiddleware",

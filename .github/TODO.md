@@ -1,1 +1,2 @@
-- IMP IMP work on API_KEY fixing config or use .env
+- Get package to use .env from django
+- [x] IMP IMP work on API_KEY fixing config or use .env
