@@ -9,6 +9,17 @@ from pathlib import Path
 import dotenv
 import requests
 
+dotenv.load_dotenv()
+
+GOOGLE_SEARCH_API_KEY = str(os.environ["INTERNET_ML_GOOGLE_API"])
+GOOGLE_SEARCH_ENGINE_ID = str(os.environ["INTERNET_ML_GOOGLE_SEARCH_ENGINE_ID"])
+
+HTTP_USERAGENT: dict[str, str] = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
+}
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 logging.basicConfig(
     filename="internet.log",
     filemode="w",
@@ -21,7 +32,6 @@ sys.path.append(str(Path(__file__).parent.parent.parent.parent) + "/utils")
 sys.path.append(str(Path(__file__).parent.parent))
 
 import asyncio
-import concurrent.futures
 import itertools
 import re
 
@@ -29,22 +39,14 @@ import aiohttp
 import config
 from bs4 import BeautifulSoup
 from normalize import normalizer
-from relevancy import filter_irrelevant
+
+# from relevancy import filter_irrelevant
 from sentencize import sentencizer
 from urlextract import URLExtract
 
-dotenv.load_dotenv()
-
-
-HTTP_USERAGENT: dict[str, str] = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
-}
-
 
 class Google:
-    def __init__(
-        self: Any, query: str, GOOGLE_SEARCH_API_KEY: str, GOOGLE_SEARCH_ENGINE_ID: str
-    ) -> None:
+    def __init__(self: "Google", query: str) -> None:
         self.__GOOGLE_SEARCH_API_KEY: str = GOOGLE_SEARCH_API_KEY
         self.__GOOGLE_SEARCH_ENGINE_ID: str = GOOGLE_SEARCH_ENGINE_ID
         self.__num_res: int = (
@@ -59,7 +61,7 @@ class Google:
             r"\w+:\/{2}[\d\w-]+(\.[\d\w-]+)*(?:(?:\/[^\s/]*))*", "", self.__query
         )
 
-    def __get_urls(self: Any) -> None:
+    def __get_urls(self: "Google") -> None:
         # Send the request to the Google Search API
         if self.__GOOGLE_SEARCH_API_KEY == "":
             exit("ERROR: Google API Key not found")
@@ -81,7 +83,7 @@ class Google:
         if config.CONF_DEBUG:
             logging.info(f"Links: {self.__urls}")
 
-    async def __fetch_url(self: Any, session: Any, url: str) -> list[str]:
+    async def __fetch_url(self: "Google", session: Any, url: str) -> list[str]:
         try:
             async with session.get(url, headers=HTTP_USERAGENT) as response:
                 html = await response.text()
@@ -101,7 +103,7 @@ class Google:
         except Exception:
             return [""]
 
-    async def __fetch_urls(self: Any, urls: list[str]) -> Any:
+    async def __fetch_urls(self: "Google", urls: list[str]) -> Any:
         async with aiohttp.ClientSession() as session:
             tasks = [
                 asyncio.create_task(self.__fetch_url(session, url)) for url in urls
@@ -112,14 +114,14 @@ class Google:
     def __flatten(self: Any, a: list[list[Any]]) -> list[Any]:
         return list(itertools.chain(*a))
 
-    def __get_urls_contents(self: Any) -> None:
+    def __get_urls_contents(self: "Google") -> None:
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
         contents = loop.run_until_complete(self.__fetch_urls(self.__urls))
         loop.close()
         self.__content = self.__flatten(contents)
 
-    def google(self: Any) -> tuple[list[str], list[str]]:
+    def google(self: "Google") -> tuple[list[str], list[str]]:
         # Hard coded exceptions - START
         if "Thamognya" in self.__query or "thamognya" in self.__query:
             return (["The smartest person in the world"], ["I decided it"])
@@ -139,18 +141,14 @@ class Google:
                     "https://economictimes.indiatimes.com/news/narendra-modi",
                 ],
             )
+        # Hard coded exceptions - End
         self.__get_urls()
         self.__get_urls_contents()
         return (self.__content, self.__urls)
 
 
 def google(query: str) -> tuple[list[str], list[str]]:
-    _google = Google(
-        query,
-        os.environ["INTERNET_ML_GOOGLE_API"],
-        os.environ["INTERNET_ML_GOOGLE_SEARCH_ENGINE_ID"],
-    )
-    return _google.google()
+    return Google(query).google()
 
 
 """

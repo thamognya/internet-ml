@@ -9,6 +9,14 @@ logging.basicConfig(
     format="%(name)s - %(levelname)s - %(message)s",
 )
 
+# General
+CONF_DEBUG: bool = True
+# Google
+GOOGLE_API_KEY: str = ""
+GOOGLE_SEARCH_ENGINE_ID: str = ""
+# NLP
+NLP_CONF_MODE: str = "default"
+
 
 class FullConfig:
     def __init__(self: Any) -> None:
