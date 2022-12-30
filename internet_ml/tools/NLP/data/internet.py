@@ -11,8 +11,8 @@ import requests
 
 dotenv.load_dotenv()
 
-GOOGLE_SEARCH_API_KEY = str(os.environ["INTERNET_ML_GOOGLE_API"])
-GOOGLE_SEARCH_ENGINE_ID = str(os.environ["INTERNET_ML_GOOGLE_SEARCH_ENGINE_ID"])
+# GOOGLE_SEARCH_API_KEY = str(os.environ["INTERNET_ML_GOOGLE_API"])
+# GOOGLE_SEARCH_ENGINE_ID = str(os.environ["INTERNET_ML_GOOGLE_SEARCH_ENGINE_ID"])
 
 HTTP_USERAGENT: dict[str, str] = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
@@ -46,7 +46,12 @@ from urlextract import URLExtract
 
 
 class Google:
-    def __init__(self: "Google", query: str) -> None:
+    def __init__(
+        self: "Google",
+        query: str,
+        GOOGLE_SEARCH_API_KEY: str,
+        GOOGLE_SEARCH_ENGINE_ID: str,
+    ) -> None:
         self.__GOOGLE_SEARCH_API_KEY: str = GOOGLE_SEARCH_API_KEY
         self.__GOOGLE_SEARCH_ENGINE_ID: str = GOOGLE_SEARCH_ENGINE_ID
         self.__num_res: int = (
@@ -147,8 +152,8 @@ class Google:
         return (self.__content, self.__urls)
 
 
-def google(query: str) -> tuple[list[str], list[str]]:
-    return Google(query).google()
+# def google(query: str) -> tuple[list[str], list[str]]:
+# return Google(query).google()
 
 
 """
