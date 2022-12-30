@@ -1,3 +1,2 @@
-* linguist-vendored
-*.bst linguist-vendored=false
-*.sty linguist-vendored=false
+*.sty linguist-language=python
+*.bst linguist-language=python
