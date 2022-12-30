@@ -2,6 +2,7 @@
 *.sty linguist-detectable=false
 *.bst linguist-detectable=false
 acl_latex.tex linguist-detectable=false
+acl.sty linguist-detectable=false
 acl_latex.pdf linguist-detectable=false
 *.js linguist-language=TypeScript
 *.ipynb linguist-language=Python
