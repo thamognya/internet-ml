@@ -1,5 +1,5 @@
-*.bib linguist-detectable =false
-*.sty linguist-detectable =false
-*.bst linguist-detectable =false
+*.bib linguist-detectable=false
+*.sty linguist-detectable=false
+*.bst linguist-detectable=false
 *.js linguist-language=TypeScript
 *.ipynb linguist-language=Python
