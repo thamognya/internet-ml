@@ -22,14 +22,11 @@ sys.path.append(str(Path(__file__).parent.parent.parent) + "/utils")
 import config
 import internet
 
-GOOGLE_SEARCH_API_KEY = str(os.environ["INTERNET_ML_GOOGLE_API"])
-GOOGLE_SEARCH_ENGINE_ID = str(os.environ["INTERNET_ML_GOOGLE_SEARCH_ENGINE_ID"])
-
-QA_MODEL: Any = pipeline("question-answering")
-
 
 def answer(query: str) -> tuple[Any, list[str]]:
-    global QA_MODEL
+    QA_MODEL: Any = pipeline("question-answering")
+    GOOGLE_SEARCH_API_KEY = str(os.environ["INTERNET_ML_GOOGLE_API"])
+    GOOGLE_SEARCH_ENGINE_ID = str(os.environ["INTERNET_ML_GOOGLE_SEARCH_ENGINE_ID"])
     results: tuple[list[str], list[str]] = internet.Google(
         query, GOOGLE_SEARCH_API_KEY, GOOGLE_SEARCH_ENGINE_ID
     ).google()
