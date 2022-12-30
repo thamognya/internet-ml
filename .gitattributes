@@ -1,6 +1,5 @@
-* linguist-vendored
-*.bib linguist-vendored=false
-*.sty linguist-vendored=false
-*.bst linguist-vendored=false
+*.bib linguist-detectable =false
+*.sty linguist-detectable =false
+*.bst linguist-detectable =false
 *.js linguist-language=TypeScript
 *.ipynb linguist-language=Python
