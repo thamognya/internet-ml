@@ -1,2 +1,1 @@
-*.sty linguist-language=python
-*.bst linguist-language=python
+*.* linguist-language=Python
