@@ -23,10 +23,12 @@ import config
 import internet
 
 
-def answer(query: str) -> tuple[Any, list[str]]:
+def answer(
+    query: str, GOOGLE_SEARCH_API_KEY: str, GOOGLE_SEARCH_ENGINE_ID: str
+) -> tuple[Any, list[str]]:
     QA_MODEL: Any = pipeline("question-answering")
-    GOOGLE_SEARCH_API_KEY = str(os.environ["INTERNET_ML_GOOGLE_API"])
-    GOOGLE_SEARCH_ENGINE_ID = str(os.environ["INTERNET_ML_GOOGLE_SEARCH_ENGINE_ID"])
+    # GOOGLE_SEARCH_API_KEY = str(os.getenv("INTERNET_ML_GOOGLE_API"))
+    # GOOGLE_SEARCH_ENGINE_ID = str(os.getenv("INTERNET_ML_GOOGLE_SEARCH_ENGINE_ID"))
     results: tuple[list[str], list[str]] = internet.Google(
         query, GOOGLE_SEARCH_API_KEY, GOOGLE_SEARCH_ENGINE_ID
     ).google()

@@ -1,7 +1,5 @@
 from django.views.generic.base import TemplateView
 
-# Create your views here.
 
-
-class ApiView(TemplateView):
+class APIView(TemplateView):
     template_name = "index.api.dj.html"

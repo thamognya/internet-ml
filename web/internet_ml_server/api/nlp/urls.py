@@ -6,6 +6,6 @@ from django.urls import include, path
 from . import views
 
 urlpatterns: list[Any] = [
-    path("", views.APIView.as_view(), name="api"),
-    path("nlp/", include("api.nlp.urls"), name="nlp api"),
+    path("", views.NLPView.as_view(), name="nlp"),
+    path("no-context/", include("api.nlp.nocontext.urls"), name="nlp no context api"),
 ]

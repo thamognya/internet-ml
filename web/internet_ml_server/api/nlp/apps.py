@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class QuestionAnswerConfig(AppConfig):
+class NlpConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
-    name = "api.question_answer"
+    name = "api.nlp"

@@ -42,7 +42,9 @@ INSTALLED_APPS: list[str] = [
     "rest_framework",
     "internet_ml",
     "api",
-    "api.question_answer",
+    "api.nlp",
+    "api.nlp.context",
+    "api.nlp.nocontext",
 ]
 
 REST_FRAMEWORK = {"DEFAULT_METADATA_CLASS": "rest_framework.metadata.SimpleMetadata"}
@@ -64,9 +66,11 @@ TEMPLATES: list[Any] = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [
-            str(BASE_DIR) + "/api/templates",
             str(BASE_DIR) + "/internet_ml_server/templates",
-            str(BASE_DIR) + "/api/question_answer/templates",
+            str(BASE_DIR) + "/api/templates",
+            str(BASE_DIR) + "/api/nlp/templates",
+            str(BASE_DIR) + "/api/nlp/context/templates",
+            str(BASE_DIR) + "/api/nlp/nocontext/templates",
         ],
         "APP_DIRS": True,
         "OPTIONS": {

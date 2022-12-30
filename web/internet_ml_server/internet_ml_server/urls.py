@@ -22,6 +22,6 @@ from . import views
 
 urlpatterns: list[Any] = [
     # path("admin/", admin.site.urls),
-    path("", views.IndexView.as_view(), name="api"),
+    path("", views.IndexView.as_view(), name="index"),
     path("api/", include("api.urls"), name="api"),
 ]

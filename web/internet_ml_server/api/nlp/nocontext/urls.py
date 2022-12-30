@@ -6,5 +6,5 @@ from django.urls import include, path
 from . import views
 
 urlpatterns: list[Any] = [
-    path("", views.QAView.as_view()),
+    path("question-answering/", views.QAView.as_view(), name="nlp"),
 ]

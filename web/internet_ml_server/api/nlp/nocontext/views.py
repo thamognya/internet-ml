@@ -1,14 +1,15 @@
 import json
+import os
 
-from django.views.generic.base import TemplateView
 from dotenv import load_dotenv
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from internet_ml.NLP.no_context import QA
+from .tools import question_answer
 
 load_dotenv()
+import internet_ml.NLP.no_context.QA
 
 
 class QAView(APIView):
@@ -35,14 +36,12 @@ class QAView(APIView):
         }
         so check error if it exists first and then for other stuff
         """
-        try:
-            answer = QA.answer(request.POST.get("question"))
-            content = json.dumps(
-                {"error": "", "response": answer[0], "resources": answer[1]}
-            )
-            return Response(content, status=status.HTTP_200_OK)
-        except:
-            content = json.dumps(
-                {"error": "Google API key not present in .env or environment"}
-            )
-            return Response(content, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        answer = internet_ml.NLP.no_context.QA.answer(
+            request.POST.get("question"),
+            str(os.getenv("INTERNET_ML_GOOGLE_API")),
+            str(os.getenv("INTERNET_ML_GOOGLE_SEARCH_ENGINE_ID")),
+        )
+        content = json.dumps(
+            {"error": "", "response": answer[0], "resources": answer[1]}
+        )
+        return content
