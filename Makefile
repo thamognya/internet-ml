@@ -136,4 +136,4 @@ build-remove:
 	rm -rf build/
 
 .PHONY: cleanup
-cleanup: pycache-remove dsstore-remove mypycache-remove ipynbcheckpoints-remove pytestcache-remove pkl-remove log-remove env-remove env-fishremove
+cleanup: pycache-remove dsstore-remove mypycache-remove ipynbcheckpoints-remove pytestcache-remove pkl-remove log-remove
