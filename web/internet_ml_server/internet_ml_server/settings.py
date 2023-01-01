@@ -29,6 +29,7 @@ DEBUG: bool = True
 
 ALLOWED_HOSTS: list[str] = ["*"]
 
+APPEND_SLASH: bool = False
 
 # Application definition
 
