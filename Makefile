@@ -123,9 +123,17 @@ pytestcache-remove:
 pytestcache-remove:
 	find . | grep -E ".log" | xargs rm -rf
 
+.PHONY: env-remove
+pytestcache-remove:
+	find . | grep -E ".env" | xargs rm -rf
+
+.PHONY: env-fishremove
+pytestcache-remove:
+	find . | grep -E ".env-fish" | xargs rm -rf
+
 .PHONY: build-remove
 build-remove:
 	rm -rf build/
 
 .PHONY: cleanup
-cleanup: pycache-remove dsstore-remove mypycache-remove ipynbcheckpoints-remove pytestcache-remove pkl-remove log-remove
+cleanup: pycache-remove dsstore-remove mypycache-remove ipynbcheckpoints-remove pytestcache-remove pkl-remove log-remove env-remove env-fishremove

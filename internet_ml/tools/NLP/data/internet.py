@@ -9,11 +9,6 @@ from pathlib import Path
 import dotenv
 import requests
 
-dotenv.load_dotenv()
-
-# GOOGLE_SEARCH_API_KEY = str(os.environ["INTERNET_ML_GOOGLE_API"])
-# GOOGLE_SEARCH_ENGINE_ID = str(os.environ["INTERNET_ML_GOOGLE_SEARCH_ENGINE_ID"])
-
 HTTP_USERAGENT: dict[str, str] = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
 }
@@ -54,6 +49,20 @@ class Google:
     ) -> None:
         self.__GOOGLE_SEARCH_API_KEY: str = GOOGLE_SEARCH_API_KEY
         self.__GOOGLE_SEARCH_ENGINE_ID: str = GOOGLE_SEARCH_ENGINE_ID
+        # dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
+        # dotenv.load_dotenv(dotenv_path)
+        # self.__GOOGLE_SEARCH_API_KEY: str = ""
+        # self.__GOOGLE_SEARCH_ENGINE_ID: str = ""
+        # if (
+        #     "INTERNET_ML_GOOGLE_API" in os.environ
+        #     and "INTERNET_ML_GOOGLE_SEARCH_ENGINE_ID" in os.environ
+        # ):
+        #     self.__GOOGLE_SEARCH_API_KEY = str(os.environ.get("INTERNET_ML_GOOGLE_API"))
+        #     self.__GOOGLE_SEARCH_ENGINE_ID = str(
+        #         os.environ.get("INTERNET_ML_GOOGLE_SEARCH_ENGINE_ID")
+        #     )
+        # else:
+        #     exit("API KEYS")
         self.__num_res: int = (
             5
             if config.NLP_CONF_MODE == "speed"
@@ -62,8 +71,12 @@ class Google:
         self.__query = query
         self.__URL_EXTRACTOR: URLExtract = URLExtract()
         self.__urls: list[str] = self.__URL_EXTRACTOR.find_urls(query)
-        self.__query = re.sub(
-            r"\w+:\/{2}[\d\w-]+(\.[\d\w-]+)*(?:(?:\/[^\s/]*))*", "", self.__query
+        self.__query = str(
+            re.sub(
+                r"\w+:\/{2}[\d\w-]+(\.[\d\w-]+)*(?:(?:\/[^\s/]*))*",
+                "",
+                str(self.__query),
+            )
         )
 
     def __get_urls(self: "Google") -> None:
@@ -150,10 +163,6 @@ class Google:
         self.__get_urls()
         self.__get_urls_contents()
         return (self.__content, self.__urls)
-
-
-# def google(query: str) -> tuple[list[str], list[str]]:
-# return Google(query).google()
 
 
 """

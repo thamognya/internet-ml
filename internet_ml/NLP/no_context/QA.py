@@ -8,8 +8,6 @@ from pathlib import Path
 import dotenv
 from transformers import pipeline
 
-dotenv.load_dotenv()
-
 logging.basicConfig(
     filename="QA.log",
     filemode="w",
@@ -27,8 +25,6 @@ def answer(
     query: str, GOOGLE_SEARCH_API_KEY: str, GOOGLE_SEARCH_ENGINE_ID: str
 ) -> tuple[Any, list[str]]:
     QA_MODEL: Any = pipeline("question-answering")
-    # GOOGLE_SEARCH_API_KEY = str(os.getenv("INTERNET_ML_GOOGLE_API"))
-    # GOOGLE_SEARCH_ENGINE_ID = str(os.getenv("INTERNET_ML_GOOGLE_SEARCH_ENGINE_ID"))
     results: tuple[list[str], list[str]] = internet.Google(
         query, GOOGLE_SEARCH_API_KEY, GOOGLE_SEARCH_ENGINE_ID
     ).google()
@@ -41,6 +37,6 @@ def answer(
     return answer
 
 
-# print(answer("Who is the author of TinTin?"))
-
+# print(os.environ)
+# print(answer("Who is Elon Musk?"))
 # def custom_answer

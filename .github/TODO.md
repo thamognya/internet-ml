@@ -1,2 +1,4 @@
-- Get package to use .env from django
+- [ ] make frontend
+- [ ] find better way of using .env from django (possibly)
+- [x] Get package to use .env from django
 - [x] IMP IMP work on API_KEY fixing config or use .env
