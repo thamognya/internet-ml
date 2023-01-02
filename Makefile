@@ -86,7 +86,6 @@ container-build:
 	docker build \
 		-t $(IMAGE):$(VERSION) . \
 		-f ./container/Containerfile --no-cache
-
 # Example: make container-remove VERSION=latest
 # Example: make container-remove IMAGE=some_name VERSION=0.1.0
 .PHONY: container-remove
