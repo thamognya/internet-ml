@@ -1,4 +1,5 @@
-- [ ] make frontend
+- [ ] make frontend -> look better plus clean up code 
 - [ ] find better way of using .env from django (possibly)
+- [ ] use gpt-neox-20b for qa
 - [x] Get package to use .env from django
 - [x] IMP IMP work on API_KEY fixing config or use .env
