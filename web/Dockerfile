@@ -7,5 +7,6 @@ RUN apt install -y nodejs && npm install --global yarn
 RUN pip3 install transformers tokenizers datasets contractions torch nltk spacy urlextract internet-ml django djangorestframework
 RUN cd /app/frontend/ && yarn install
 RUN cd ../ && npm i -g concurrently
-CMD [ "./run.sh" ]
 EXPOSE 3000:3000
+EXPOSE 8080:8080
+CMD [ "./run.sh" ]
