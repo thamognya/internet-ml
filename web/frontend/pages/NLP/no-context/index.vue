@@ -10,7 +10,7 @@ div
         a.url(href='/') Part of Internet-ML
     .grid.grid-cols-1.gap-y-4.place-items-center(class='md:grid-cols-2')
       h1.text-2xl
-        a.url(href='/NLP/no-context/question-answer') Question Answering
+        a.url(href='/NLP/no-context/question-answering') Question Answering
       h1.text-2xl
         a.url(href='/NLP/context/NLI') NLI
 </template>
