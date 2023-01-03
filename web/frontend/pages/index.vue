@@ -1,25 +1,23 @@
+<template lang="pug">
+div
+  .grid.grid-cols-1.place-content-center.align-middle.gap-y-10.h-screen.text-center
+    .grid.grid-cols-1.place-self-center
+      h1.text-5xl
+        a.url(href='/') Internet-ML
+      h1.text-xl
+        a.url(href='https://links.thamognya.com') by Thamognya Kodi
+    .grid.grid-cols-1.gap-y-4.place-items-center(class='md:grid-cols-3')
+      h1.text-2xl
+        a.url(href='/NLP') NLP
+      h1.text-2xl
+        a.url(href='/#') Image Generation (in-progress)
+      h1.text-2xl
+        a.url(href='/#') Audio (in-progress)
+</template>
+
 <script lang="typescript">
 import Vue from 'vue'
 export default Vue.extend({
     name: 'IndexPage'
 })
 </script>
-
-<template lang="pug">
-html(lang="en")
-  body
-    //- navbar
-    div(class="grid grid-cols-1 place-content-center align-middle gap-y-10 h-screen text-center")
-      div(class="grid grid-cols-1 place-self-center")
-        h1(class="text-5xl")
-          a(href="/" class="url") Internet-ML
-        h1(class="text-xl")
-          a(href="https://links.thamognya.com" class="url") by Thamognya Kodi
-      div(class="grid md:grid-cols-3 grid-cols-1 gap-y-4 place-items-center")
-        h1(class="text-2xl")
-          a(href="/NLP" class="url") NLP
-        h1(class="text-2xl")
-          a(href="/#" class="url") Image Generation (in-progress)
-        h1(class="text-2xl")
-          a(href="/#" class="url") Audio (in-progress)
-</template>
