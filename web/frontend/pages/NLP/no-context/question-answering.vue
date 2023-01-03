@@ -70,7 +70,7 @@ export default {
             this.loading = true
             try {
                 const { data } = await this.$axios.post(
-                    'http://localhost:8080/api/nlp/no-context/question-answering/',
+                    'https://internet-ml-backend.paas.thamognya.com/api/nlp/no-context/question-answering/',
                     {
                         question: this.form.question
                     }
