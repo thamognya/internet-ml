@@ -37,8 +37,9 @@ class QAView(APIView):
         """
         answer = internet_ml.NLP.no_context.QA.answer(
             str(request.data["question"]),
-            str(os.environ.get("INTERNET_ML_GOOGLE_API")),
-            str(os.environ.get("INTERNET_ML_GOOGLE_SEARCH_ENGINE_ID")),
+            str(os.environ.get("GOOGLE_SEARCH_API_KEY")),
+            str(os.environ.get("GOOGLE_SEARCH_ENGINE_ID")),
+            str(os.environ.get("OPENAI_API_KEY")),
         )
         content = {
             "error": "",

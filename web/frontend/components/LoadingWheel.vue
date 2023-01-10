@@ -1,5 +1,5 @@
 <template lang="pug">
-div(class="lds-ring")
+.lds-ring
     div
     div
     div

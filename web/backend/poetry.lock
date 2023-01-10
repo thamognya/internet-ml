@@ -789,14 +789,14 @@ testing = ["flake8 (<5)", "flufl.flake8", "importlib-resources (>=1.3)", "packag
 
 [[package]]
 name = "internet-ml"
-version = "2.0.0"
+version = "2.0.1"
 description = "Internet-ML: Allowing ML to connect to the internet"
 category = "main"
 optional = false
 python-versions = ">=3.10,<4.0"
 files = [
-    {file = "internet_ml-2.0.0-py3-none-any.whl", hash = "sha256:4ee61fbe476a75194bfdd7f1a95b1e29f16d958e9e8a51074566a41a916a86a4"},
-    {file = "internet_ml-2.0.0.tar.gz", hash = "sha256:619b10cd7e00b0068c6217a2fc5b1c80f7a57a2a56190d65483a895b4042df5b"},
+    {file = "internet_ml-2.0.1-py3-none-any.whl", hash = "sha256:5cf68675a597e1bc30ae4efd2eb4932af95f140d565af2c23407fa5e022915af"},
+    {file = "internet_ml-2.0.1.tar.gz", hash = "sha256:51c0c8e77d2e392eb8cb0c9942084d7bf197235a1e8520650bd3a29a9d0f0831"},
 ]
 
 [package.dependencies]
@@ -807,6 +807,7 @@ datasets = ">=2.8.0,<3.0.0"
 diffusers = ">=0.11.1,<0.12.0"
 nltk = ">=3.8,<4.0"
 numpy = ">=1.24.0,<2.0.0"
+openai = ">=0.26.0,<0.27.0"
 pandas = ">=1.5.2,<2.0.0"
 python-dotenv = ">=0.21.0,<0.22.0"
 requests = ">=2.28.1,<3.0.0"
@@ -1257,6 +1258,28 @@ files = [
 [package.dependencies]
 setuptools = "*"
 wheel = "*"
+
+[[package]]
+name = "openai"
+version = "0.26.0"
+description = "Python client library for the OpenAI API"
+category = "main"
+optional = false
+python-versions = ">=3.7.1"
+files = [
+    {file = "openai-0.26.0.tar.gz", hash = "sha256:e5e8ef9a232be844ae9b2b443389ef4189ce56af70bfe4bee77fbaba4bbd504b"},
+]
+
+[package.dependencies]
+aiohttp = "*"
+requests = ">=2.20"
+tqdm = "*"
+
+[package.extras]
+datalib = ["numpy", "openpyxl (>=3.0.7)", "pandas (>=1.2.3)", "pandas-stubs (>=1.1.0.11)"]
+dev = ["black (>=21.6b0,<22.0)", "pytest (>=6.0.0,<7.0.0)", "pytest-asyncio", "pytest-mock"]
+embeddings = ["matplotlib", "numpy", "openpyxl (>=3.0.7)", "pandas (>=1.2.3)", "pandas-stubs (>=1.1.0.11)", "plotly", "scikit-learn (>=1.0.2)", "sklearn", "tenacity (>=8.0.1)"]
+wandb = ["numpy", "openpyxl (>=3.0.7)", "pandas (>=1.2.3)", "pandas-stubs (>=1.1.0.11)", "wandb"]
 
 [[package]]
 name = "packaging"

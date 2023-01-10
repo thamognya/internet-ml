@@ -1,7 +1,8 @@
-from typing import Any, List, Tuple
+from typing import Any, Dict, List, Tuple
 
 import logging
 import os
+import pickle
 import sys
 from importlib import reload
 from pathlib import Path
@@ -27,17 +28,20 @@ sys.path.append(str(Path(__file__).parent.parent.parent.parent) + "/utils")
 sys.path.append(str(Path(__file__).parent.parent))
 
 import asyncio
+import concurrent.futures
 import itertools
 import re
 
 import aiohttp
 import config
 from bs4 import BeautifulSoup
+from keywords import get_keywords
 from normalize import normalizer
-
-# from relevancy import filter_irrelevant
+from relevancy import filter_relevant
 from sentencize import sentencizer
 from urlextract import URLExtract
+
+dotenv.load_dotenv()
 
 
 class Google:
@@ -49,20 +53,6 @@ class Google:
     ) -> None:
         self.__GOOGLE_SEARCH_API_KEY: str = GOOGLE_SEARCH_API_KEY
         self.__GOOGLE_SEARCH_ENGINE_ID: str = GOOGLE_SEARCH_ENGINE_ID
-        # dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
-        # dotenv.load_dotenv(dotenv_path)
-        # self.__GOOGLE_SEARCH_API_KEY: str = ""
-        # self.__GOOGLE_SEARCH_ENGINE_ID: str = ""
-        # if (
-        #     "INTERNET_ML_GOOGLE_API" in os.environ
-        #     and "INTERNET_ML_GOOGLE_SEARCH_ENGINE_ID" in os.environ
-        # ):
-        #     self.__GOOGLE_SEARCH_API_KEY = str(os.environ.get("INTERNET_ML_GOOGLE_API"))
-        #     self.__GOOGLE_SEARCH_ENGINE_ID = str(
-        #         os.environ.get("INTERNET_ML_GOOGLE_SEARCH_ENGINE_ID")
-        #     )
-        # else:
-        #     exit("API KEYS")
         self.__num_res: int = (
             5
             if config.NLP_CONF_MODE == "speed"
@@ -78,6 +68,8 @@ class Google:
                 str(self.__query),
             )
         )
+        self.__cache_file: str = "google_internet_cache.pkl"
+        self.__content: list[str] = []
 
     def __get_urls(self: "Google") -> None:
         # Send the request to the Google Search API
@@ -139,30 +131,42 @@ class Google:
         loop.close()
         self.__content = self.__flatten(contents)
 
-    def google(self: "Google") -> tuple[list[str], list[str]]:
-        # Hard coded exceptions - START
-        if "Thamognya" in self.__query or "thamognya" in self.__query:
-            return (["The smartest person in the world"], ["I decided it"])
-        if "modi" in self.__query or "Modi" in self.__query:
-            return (
-                ["Prime Minister of India"],
-                [
-                    "https://www.narendramodi.in/",
-                    "https://en.wikipedia.org/wiki/Narendra_Modi",
-                    "https://twitter.com/narendramodi?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor",
-                    "https://www.instagram.com/narendramodi/?hl=en",
-                    "https://www.facebook.com/narendramodi/",
-                    "http://www.pmindia.gov.in/en/",
-                    "https://timesofindia.indiatimes.com/topic/Narendra-Modi",
-                    "https://www.britannica.com/biography/Narendra-Modi",
-                    "https://indianexpress.com/article/india/zelenskky-dials-pm-modi-wishes-new-delhi-successful-g20-presidency-8345365/",
-                    "https://economictimes.indiatimes.com/news/narendra-modi",
-                ],
-            )
-        # Hard coded exceptions - End
+    def __filter_irrelevant_processing(self: "Google") -> None:
+        # Create a ThreadPoolExecutor with 4 worker threads
+        with concurrent.futures.ThreadPoolExecutor(max_workers=500) as executor:
+            # Create a list of futures for the filtering tasks
+            futures = [executor.submit(filter_relevant, self.__content, self.__query)]
+            # Wait for the tasks to complete
+            concurrent.futures.wait(futures)
+            # Get the results of the tasks
+            content: list[str] = []
+            for future in futures:
+                content.append(future.result())
+            self.__content = content
+
+    def google(
+        self: "Google", filter_irrelevant: bool = True
+    ) -> tuple[list[str], list[str]]:
+        # Check the cache file first
+        try:
+            with open(self.__cache_file, "rb") as f:
+                cache = pickle.load(f)
+        except FileNotFoundError:
+            cache = {}
+        # Check if query are in the cache
+        if self.__query in cache:
+            results_cache: tuple[list[str], list[str]] = cache[self.__query]
+            return results_cache
+        # If none of the keywords are in the cache, get the results and update the cache
         self.__get_urls()
         self.__get_urls_contents()
-        return (self.__content, self.__urls)
+        if filter_irrelevant:
+            self.__filter_irrelevant_processing()
+        results: tuple[list[str], list[str]] = (self.__content, self.__urls)
+        cache[self.__query] = results
+        with open(self.__cache_file, "wb") as f:
+            pickle.dump(cache, f)
+        return results
 
 
 """

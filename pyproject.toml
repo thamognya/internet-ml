@@ -5,7 +5,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "internet-ml"
-version = "2.0.0"
+version = "2.0.2"
 description = "Internet-ML: Allowing ML to connect to the internet"
 readme = "./.github/README.md"
 authors = ["Thamognya Kodi <contact@thamognya.com>"]
@@ -53,6 +53,8 @@ spacy = "^3.4.4"
 nltk = "^3.8"
 beautifulsoup4 = "^4.11.1"
 diffusers = "^0.11.1"
+openai = "^0.26.0"
+revchatgpt = "^0.1.1"
 
 [tool.poetry.group.dev.dependencies]
 bandit = "^1.7.4"

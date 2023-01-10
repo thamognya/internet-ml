@@ -2,5 +2,4 @@
 // const mobileOpen = useState('mobileOpen', () => false)
 </script>
 
-<template lang="pug">
-</template>
+<template lang="pug"></template>
