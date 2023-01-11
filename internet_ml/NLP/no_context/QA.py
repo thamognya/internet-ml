@@ -1,3 +1,4 @@
+# type: ignore
 from typing import Any, List, Tuple
 
 import logging
@@ -7,7 +8,7 @@ from pathlib import Path
 
 import dotenv
 import openai
-from transformers import list_models, pipeline
+from transformers import pipeline
 
 logging.basicConfig(
     filename="QA.log",
@@ -17,16 +18,18 @@ logging.basicConfig(
 )
 
 sys.path.append(str(Path(__file__).parent.parent.parent) + "/tools/NLP/data")
+sys.path.append(str(Path(__file__).parent.parent.parent) + "/tools/NLP")
 sys.path.append(str(Path(__file__).parent.parent.parent) + "/utils")
 import config
 import internet
+from ChatGPT import Chatbot
 
 dotenv.load_dotenv()
 
 
 def answer(
     query: str,
-    model: str = "openai-ChatGPT",
+    model: str = "openai-chatgpt",
     GOOGLE_SEARCH_API_KEY: str = "",
     GOOGLE_SEARCH_ENGINE_ID: str = "",
     OPENAI_API_KEY: str = "",
@@ -50,34 +53,54 @@ def answer(
     include prefix hf-*
     # 
     """
-    if not (model.startswith("openai-") == 0 or model.startswith("hf-") == 0):
-        model = "openai-ChatGPT"  # Default
+    if not (model.startswith("openai-") or model.startswith("hf-")):
+        model = "openai-chatgpt"  # Default
 
-    answer: str = ""
-    if model.startswith("openai-") == 0:
-        # results: tuple[list[str], list[str]] = internet.Google(
-        #     query, GOOGLE_SEARCH_API_KEY, GOOGLE_SEARCH_ENGINE_ID
-        # ).google(filter_irrelevant=True)
-        print("hi")
+    if model.startswith("openai-"):
+        if model == "openai-chatgpt":
+            # ChatGPT
+            results: tuple[list[str], list[str]] = internet.Google(
+                query, GOOGLE_SEARCH_API_KEY, GOOGLE_SEARCH_ENGINE_ID
+            ).google(filter_irrelevant=False)
+            print(results)
+            chatbot = Chatbot(
+                {"session_token": CHATGPT_SESSION_TOKEN},
+                conversation_id=None,
+                parent_id=None,
+            )
+            response = chatbot.ask(
+                f"Utilize the following context: {results[0]} ontop of existing knowledge and answer the question: {query}",
+                conversation_id=None,
+                parent_id=None,
+            )
+            return (response.message, results[1])
+        else:
+            if model == "openai-text-davinci-003":
+                results: tuple[list[str], list[str]] = internet.Google(
+                    query, GOOGLE_SEARCH_API_KEY, GOOGLE_SEARCH_ENGINE_ID
+                ).google(filter_irrelevant=True)
+                context = " ".join(results[0])
+                context[: (4097 - len(query) - 10)]
+                response = openai.Completion.create(
+                    model="text-davinci-003",
+                    prompt=f"{context} Q: {query}",
+                    max_tokens=len(context),
+                    n=1,
+                    stop=None,
+                    temperature=0.5,
+                )
+                return (response.choices[0].text, results[1])
+            # TODO: add suport later
     else:
-        models = [
-            model
-            for model in list_models()
-            if "qa" in model or "question-answering" in model
-        ]
         model = model.replace("hf-", "", 1)
-        if not model in models:
-            model = "hf-"
-        # results: tuple[list[str], list[str]] = internet.Google(
-        #     query, GOOGLE_SEARCH_API_KEY, GOOGLE_SEARCH_ENGINE_ID
-        # ).google(filter_irrelevant=False)
-
-    answer_result: tuple[Any, list[str]] = (answer, ["hi"])  # results[1])
-    if config.CONF_DEBUG:
-        logging.info(f"Answer: {answer_result}")
-    return answer_result
+        results: tuple[list[str], list[str]] = internet.Google(
+            query, GOOGLE_SEARCH_API_KEY, GOOGLE_SEARCH_ENGINE_ID
+        ).google(filter_irrelevant=False)
+        qa_model = pipeline("question-answering", model=model)
+        response = qa_model(question=query, context=" ".join(results[0]))
+        return (response["answer"], results[1])
 
 
 # print(os.environ)
-print(answer("What is the newest Pokemon Game?"))
+# print(answer(query="What is the newest Pokemon Game?", model="hf-deepset/deberta-v3-base-squad2"))
 # def custom_answer
