@@ -1,6 +1,5 @@
 from typing import Any, Dict, List, Tuple
 
-import logging
 import os
 import pickle
 import sys
@@ -13,15 +12,6 @@ import requests
 HTTP_USERAGENT: dict[str, str] = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
 }
-
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
-logging.basicConfig(
-    filename="internet.log",
-    filemode="w",
-    level=logging.INFO,
-    format="%(name)s - %(levelname)s - %(message)s",
-)
 
 sys.path.append(str(Path(__file__).parent.parent.parent.parent) + "/utils/NLP")
 sys.path.append(str(Path(__file__).parent.parent.parent.parent) + "/utils")
@@ -68,7 +58,6 @@ class Google:
                 str(self.__query),
             )
         )
-        self.__cache_file: str = "google_internet_cache.pkl"
         self.__content: list[str] = []
 
     def __get_urls(self: "Google") -> None:
@@ -90,8 +79,6 @@ class Google:
             self.__urls.append(result["link"])
             if len(self.__urls) == self.__num_res:
                 break
-        if config.CONF_DEBUG:
-            logging.info(f"Links: {self.__urls}")
 
     async def __fetch_url(self: "Google", session: Any, url: str) -> list[str]:
         try:
@@ -101,14 +88,8 @@ class Google:
                 text = soup.get_text()
                 normalized_text = normalizer(text)
                 sentences: list[str] = sentencizer(normalized_text)
-                if config.CONF_DEBUG:
-                    logging.info(f"Sentences: {sentences}")
                 return sentences
         except aiohttp.ClientConnectorError:
-            if config.CONF_DEBUG:
-                logging.info(
-                    f"ClientConnector Error: Likely a connection issue with wifi"
-                )
             return [""]
         except Exception:
             return [""]
@@ -147,25 +128,11 @@ class Google:
     def google(
         self: "Google", filter_irrelevant: bool = True
     ) -> tuple[list[str], list[str]]:
-        # Check the cache file first
-        try:
-            with open(self.__cache_file, "rb") as f:
-                cache = pickle.load(f)
-        except FileNotFoundError:
-            cache = {}
-        # Check if query are in the cache
-        if self.__query in cache:
-            results_cache: tuple[list[str], list[str]] = cache[self.__query]
-            return results_cache
-        # If none of the keywords are in the cache, get the results and update the cache
         self.__get_urls()
         self.__get_urls_contents()
         if filter_irrelevant:
             self.__filter_irrelevant_processing()
         results: tuple[list[str], list[str]] = (self.__content, self.__urls)
-        cache[self.__query] = results
-        with open(self.__cache_file, "wb") as f:
-            pickle.dump(cache, f)
         return results
 
 

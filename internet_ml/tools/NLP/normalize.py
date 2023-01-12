@@ -1,13 +1,3 @@
-import logging
-
-# logging config
-logging.basicConfig(
-    filename="normalize.log",
-    filemode="w",
-    level=logging.INFO,
-    format="%(name)s - %(levelname)s - %(message)s",
-)
-
 import concurrent.futures
 import string
 import sys
@@ -67,8 +57,6 @@ def normalizer(text: str) -> str:
         .replace("               ", " ")
     )
     text = remove_non_ascii(text)
-    if config.CONF_DEBUG:
-        logging.info(text)
     return text
 
 
@@ -81,6 +69,4 @@ def normalize_sentences(sentences: list[str]) -> list[str]:
         ):
             if future.result():
                 normalized_sentences.append(sentence)
-    if config.CONF_DEBUG:
-        logging.info(f"Normalized Sentences: {normalize_sentences}")
     return normalized_sentences

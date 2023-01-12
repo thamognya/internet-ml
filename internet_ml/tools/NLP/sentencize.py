@@ -1,15 +1,5 @@
 from typing import Any, List
 
-import logging
-
-# logging config
-logging.basicConfig(
-    filename="sentencize.log",
-    filemode="w",
-    level=logging.INFO,
-    format="%(name)s - %(levelname)s - %(message)s",
-)
-
 import sys
 from pathlib import Path
 
@@ -51,8 +41,6 @@ def sentencizer(text: str) -> list[str]:
         for future in concurrent.futures.as_completed(futures):
             english_sentences.append(future.result())
 
-    if config.CONF_DEBUG:
-        logging.info(f"sentences: {english_sentences}")
     return english_sentences
 
 

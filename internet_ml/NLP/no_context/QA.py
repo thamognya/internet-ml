@@ -1,7 +1,6 @@
 # type: ignore
 from typing import Any, List, Tuple
 
-import logging
 import os
 import sys
 from pathlib import Path
@@ -9,13 +8,6 @@ from pathlib import Path
 import dotenv
 import openai
 from transformers import pipeline
-
-logging.basicConfig(
-    filename="QA.log",
-    filemode="w",
-    level=logging.INFO,
-    format="%(name)s - %(levelname)s - %(message)s",
-)
 
 sys.path.append(str(Path(__file__).parent.parent.parent) + "/tools/NLP/data")
 sys.path.append(str(Path(__file__).parent.parent.parent) + "/tools/NLP")
@@ -55,25 +47,24 @@ def answer(
     """
     if not (model.startswith("openai-") or model.startswith("hf-")):
         model = "openai-chatgpt"  # Default
-
     if model.startswith("openai-"):
         if model == "openai-chatgpt":
             # ChatGPT
             results: tuple[list[str], list[str]] = internet.Google(
                 query, GOOGLE_SEARCH_API_KEY, GOOGLE_SEARCH_ENGINE_ID
             ).google(filter_irrelevant=False)
-            print(results)
             chatbot = Chatbot(
                 {"session_token": CHATGPT_SESSION_TOKEN},
                 conversation_id=None,
                 parent_id=None,
             )
+            print(results)
             response = chatbot.ask(
-                f"Utilize the following context: {results[0]} ontop of existing knowledge and answer the question: {query}",
+                f"Utilize the following context: {results[0][:2000]} ontop of existing knowledge and answer the question: {query}",
                 conversation_id=None,
                 parent_id=None,
             )
-            return (response.message, results[1])
+            return (response["message"], results[1])
         else:
             if model == "openai-text-davinci-003":
                 results: tuple[list[str], list[str]] = internet.Google(
@@ -102,5 +93,5 @@ def answer(
 
 
 # print(os.environ)
-# print(answer(query="What is the newest Pokemon Game?", model="hf-deepset/deberta-v3-base-squad2"))
+print(answer(query="When was Cristiano Ronaldo Born?", model="openai-chatgpt"))
 # def custom_answer
