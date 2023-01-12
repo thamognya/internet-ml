@@ -111,15 +111,12 @@ class Google:
         contents = loop.run_until_complete(self.__fetch_urls(self.__urls))
         loop.close()
         self.__content = self.__flatten(contents)
+        self.__content = [str(x) for x in self.__content]
 
     def __filter_irrelevant_processing(self: "Google") -> None:
-        # Create a ThreadPoolExecutor with 4 worker threads
         with concurrent.futures.ThreadPoolExecutor(max_workers=500) as executor:
-            # Create a list of futures for the filtering tasks
             futures = [executor.submit(filter_relevant, self.__content, self.__query)]
-            # Wait for the tasks to complete
             concurrent.futures.wait(futures)
-            # Get the results of the tasks
             content: list[str] = []
             for future in futures:
                 content.append(future.result())

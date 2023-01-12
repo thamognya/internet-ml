@@ -11,7 +11,9 @@ from transformers import pipeline
 
 sys.path.append(str(Path(__file__).parent.parent.parent) + "/tools/NLP/data")
 sys.path.append(str(Path(__file__).parent.parent.parent) + "/tools/NLP")
+sys.path.append(str(Path(__file__).parent.parent.parent) + "/tools")
 sys.path.append(str(Path(__file__).parent.parent.parent) + "/utils")
+
 import config
 import internet
 from ChatGPT import Chatbot
@@ -26,6 +28,8 @@ def answer(
     GOOGLE_SEARCH_ENGINE_ID: str = "",
     OPENAI_API_KEY: str = "",
     CHATGPT_SESSION_TOKEN: str = "",
+    CHATGPT_CONVERSATION_ID: str = "",
+    CHATGPT_PARENT_ID: str = "",
 ) -> tuple[Any, list[str]]:
     # if environment keys are not given, assume it is in env
     if GOOGLE_SEARCH_API_KEY == "":
@@ -37,6 +41,10 @@ def answer(
         openai.api_key = OPENAI_API_KEY
     if CHATGPT_SESSION_TOKEN == "":
         CHATGPT_SESSION_TOKEN = str(os.environ.get("CHATGPT_SESSION_TOKEN"))
+    if CHATGPT_CONVERSATION_ID == "":
+        CHATGPT_CONVERSATION_ID = str(os.environ.get("CHATGPT_CONVERSATION_ID"))
+    if CHATGPT_PARENT_ID == "":
+        CHATGPT_PARENT_ID = str(os.environ.get("CHATGPT_PARENT_ID"))
     """
     model naming convention
     # Open-AI models:
@@ -55,15 +63,16 @@ def answer(
             ).google(filter_irrelevant=False)
             chatbot = Chatbot(
                 {"session_token": CHATGPT_SESSION_TOKEN},
-                conversation_id=None,
-                parent_id=None,
+                conversation_id=CHATGPT_CONVERSATION_ID,
+                parent_id=CHATGPT_PARENT_ID,
             )
-            print(results)
+            prompt = f"Utilize the following context: {' '.join(filter(lambda x: isinstance(x, str), results[0]))[:10000]} and answer the question only with the given context: {query}"
             response = chatbot.ask(
-                f"Utilize the following context: {results[0][:2000]} ontop of existing knowledge and answer the question: {query}",
-                conversation_id=None,
-                parent_id=None,
+                prompt=prompt,
+                conversation_id=CHATGPT_CONVERSATION_ID,
+                parent_id=CHATGPT_PARENT_ID,
             )
+            print(response)
             return (response["message"], results[1])
         else:
             if model == "openai-text-davinci-003":
@@ -93,5 +102,5 @@ def answer(
 
 
 # print(os.environ)
-print(answer(query="When was Cristiano Ronaldo Born?", model="openai-chatgpt"))
+print(answer(query="What is the latest Pokemon Game in 2022?", model="openai-chatgpt"))
 # def custom_answer

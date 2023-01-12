@@ -1,5 +1,6 @@
 # type: ignore
 # For some reason package not working so just deal with it and dont ask questions
+# Copied and updated from https://github.com/acheong08/ChatGPT/blob/main/src/revChatGPT/ChatGPT.py
 
 import json
 import logging
@@ -538,6 +539,7 @@ class Chatbot:
         options.add_argument("--no-sandbox")
         options.add_argument("--disable-setuid-sandbox")
         options.add_argument("--disable-dev-shm-usage")
+        # options.add_argument('--headless')
         if self.config.get("proxy", "") != "":
             options.add_argument("--proxy-server=" + self.config["proxy"])
         return options

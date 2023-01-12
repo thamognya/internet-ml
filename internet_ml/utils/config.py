@@ -1,14 +1,5 @@
 from typing import Any, List, Tuple
 
-import logging
-
-logging.basicConfig(
-    filename="config.log",
-    filemode="w",
-    level=logging.INFO,
-    format="%(name)s - %(levelname)s - %(message)s",
-)
-
 # General
 CONF_DEBUG: bool = True
 # Google
