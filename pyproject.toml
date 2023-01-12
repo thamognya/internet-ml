@@ -32,7 +32,7 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = "^3.10"
-typer = {extras = ["all"], version = "^0.4.0"}
+typer = {extras = ["all"], version = ">=0.4,<0.8"}
 rich = "^10.14.0"
 tokenizers = "^0.13.2"
 pandas = "^1.5.2"
