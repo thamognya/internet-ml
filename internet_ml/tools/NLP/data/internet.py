@@ -24,6 +24,7 @@ import re
 
 import aiohttp
 import config
+from adremover import AdRemover
 from bs4 import BeautifulSoup
 from keywords import get_keywords
 from normalize import normalizer
@@ -59,6 +60,11 @@ class Google:
             )
         )
         self.__content: list[str] = []
+        ADBLOCK_RULES = [
+            "https://easylist-downloads.adblockplus.org/ruadlist+easylist.txt",
+            "https://filters.adtidy.org/extension/chromium/filters/1.txt",
+        ]
+        self.__ad_remover = AdRemover(ADBLOCK_RULES)
 
     def __get_urls(self: "Google") -> None:
         # Send the request to the Google Search API
@@ -84,6 +90,7 @@ class Google:
         try:
             async with session.get(url, headers=HTTP_USERAGENT) as response:
                 html = await response.text()
+                html = self.__ad_remover.remove_ads(html)
                 soup = BeautifulSoup(html, "html.parser")
                 text = soup.get_text()
                 normalized_text = normalizer(text)

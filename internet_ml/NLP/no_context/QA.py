@@ -66,19 +66,18 @@ def answer(
                 conversation_id=CHATGPT_CONVERSATION_ID,
                 parent_id=CHATGPT_PARENT_ID,
             )
-            prompt = f"Utilize the following context: {' '.join(filter(lambda x: isinstance(x, str), results[0]))[:10000]} and answer the question only with the given context: {query}"
+            prompt = f"Utilize the following context: {' '.join(filter(lambda x: isinstance(x, str), results[0]))[:4000]} and answer the question only with the given context: {query}"
             response = chatbot.ask(
                 prompt=prompt,
                 conversation_id=CHATGPT_CONVERSATION_ID,
                 parent_id=CHATGPT_PARENT_ID,
             )
-            print(response)
             return (response["message"], results[1])
         else:
             if model == "openai-text-davinci-003":
                 results: tuple[list[str], list[str]] = internet.Google(
                     query, GOOGLE_SEARCH_API_KEY, GOOGLE_SEARCH_ENGINE_ID
-                ).google(filter_irrelevant=True)
+                ).google(filter_irrelevant=False)
                 context = " ".join(results[0])
                 context[: (4097 - len(query) - 10)]
                 response = openai.Completion.create(
@@ -102,5 +101,10 @@ def answer(
 
 
 # print(os.environ)
-print(answer(query="What is the latest Pokemon Game in 2022?", model="openai-chatgpt"))
+print(
+    answer(
+        query="What is Club is Crisitano Ronaldo in 2023?",
+        model="openai-text-davinci-003",
+    )
+)
 # def custom_answer
