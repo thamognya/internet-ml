@@ -1,7 +1,6 @@
-from typing import Any, Dict, List, Tuple
+from typing import Any, List, Tuple
 
 import os
-import pickle
 import sys
 from importlib import reload
 from pathlib import Path
@@ -18,21 +17,17 @@ sys.path.append(str(Path(__file__).parent.parent.parent.parent) + "/utils")
 sys.path.append(str(Path(__file__).parent.parent))
 
 import asyncio
-import concurrent.futures
 import itertools
 import re
 
 import aiohttp
 import config
-from adremover import AdRemover
 from bs4 import BeautifulSoup
-from keywords import get_keywords
 from normalize import normalizer
-from relevancy import filter_relevant
+
+# from relevancy import filter_irrelevant
 from sentencize import sentencizer
 from urlextract import URLExtract
-
-dotenv.load_dotenv()
 
 
 class Google:
@@ -44,11 +39,7 @@ class Google:
     ) -> None:
         self.__GOOGLE_SEARCH_API_KEY: str = GOOGLE_SEARCH_API_KEY
         self.__GOOGLE_SEARCH_ENGINE_ID: str = GOOGLE_SEARCH_ENGINE_ID
-        self.__num_res: int = (
-            5
-            if config.NLP_CONF_MODE == "speed"
-            else (20 if config.NLP_CONF_MODE else 10)
-        )
+        self.__num_res: int = 10
         self.__query = query
         self.__URL_EXTRACTOR: URLExtract = URLExtract()
         self.__urls: list[str] = self.__URL_EXTRACTOR.find_urls(query)
@@ -59,15 +50,8 @@ class Google:
                 str(self.__query),
             )
         )
-        self.__content: list[str] = []
-        ADBLOCK_RULES = [
-            "https://easylist-downloads.adblockplus.org/ruadlist+easylist.txt",
-            "https://filters.adtidy.org/extension/chromium/filters/1.txt",
-        ]
-        self.__ad_remover = AdRemover(ADBLOCK_RULES)
 
     def __get_urls(self: "Google") -> None:
-        # Send the request to the Google Search API
         if self.__GOOGLE_SEARCH_API_KEY == "":
             exit("ERROR: Google API Key not found")
         if self.__GOOGLE_SEARCH_ENGINE_ID == "":
@@ -90,7 +74,6 @@ class Google:
         try:
             async with session.get(url, headers=HTTP_USERAGENT) as response:
                 html = await response.text()
-                html = self.__ad_remover.remove_ads(html)
                 soup = BeautifulSoup(html, "html.parser")
                 text = soup.get_text()
                 normalized_text = normalizer(text)
@@ -118,26 +101,11 @@ class Google:
         contents = loop.run_until_complete(self.__fetch_urls(self.__urls))
         loop.close()
         self.__content = self.__flatten(contents)
-        self.__content = [str(x) for x in self.__content]
 
-    def __filter_irrelevant_processing(self: "Google") -> None:
-        with concurrent.futures.ThreadPoolExecutor(max_workers=500) as executor:
-            futures = [executor.submit(filter_relevant, self.__content, self.__query)]
-            concurrent.futures.wait(futures)
-            content: list[str] = []
-            for future in futures:
-                content.append(future.result())
-            self.__content = content
-
-    def google(
-        self: "Google", filter_irrelevant: bool = True
-    ) -> tuple[list[str], list[str]]:
+    def google(self: "Google") -> tuple[list[str], list[str]]:
         self.__get_urls()
         self.__get_urls_contents()
-        if filter_irrelevant:
-            self.__filter_irrelevant_processing()
-        results: tuple[list[str], list[str]] = (self.__content, self.__urls)
-        return results
+        return (self.__content, self.__urls)
 
 
 """

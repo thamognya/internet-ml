@@ -60,24 +60,26 @@ def answer(
             # ChatGPT
             results: tuple[list[str], list[str]] = internet.Google(
                 query, GOOGLE_SEARCH_API_KEY, GOOGLE_SEARCH_ENGINE_ID
-            ).google(filter_irrelevant=False)
+            ).google()
+            # print(' '.join(filter(lambda x: isinstance(x, str), results[0]))[:4000])
+            prompt = f"Using the context: {' '.join(filter(lambda x: isinstance(x, str), results[0]))[:3000]} and answer the question with the context above and previous knowledge: \"{query}\". Also write long answers or essays if asked."
+            print(prompt)
             chatbot = Chatbot(
                 {"session_token": CHATGPT_SESSION_TOKEN},
-                conversation_id=CHATGPT_CONVERSATION_ID,
-                parent_id=CHATGPT_PARENT_ID,
+                conversation_id=None,
+                parent_id=None,
             )
-            prompt = f"Utilize the following context: {' '.join(filter(lambda x: isinstance(x, str), results[0]))[:4000]} and answer the question only with the given context: {query}"
             response = chatbot.ask(
                 prompt=prompt,
-                conversation_id=CHATGPT_CONVERSATION_ID,
-                parent_id=CHATGPT_PARENT_ID,
+                conversation_id=None,
+                parent_id=None,
             )
             return (response["message"], results[1])
         else:
             if model == "openai-text-davinci-003":
                 results: tuple[list[str], list[str]] = internet.Google(
                     query, GOOGLE_SEARCH_API_KEY, GOOGLE_SEARCH_ENGINE_ID
-                ).google(filter_irrelevant=False)
+                ).google()
                 context = " ".join(results[0])
                 context[: (4097 - len(query) - 10)]
                 response = openai.Completion.create(
@@ -94,17 +96,15 @@ def answer(
         model = model.replace("hf-", "", 1)
         results: tuple[list[str], list[str]] = internet.Google(
             query, GOOGLE_SEARCH_API_KEY, GOOGLE_SEARCH_ENGINE_ID
-        ).google(filter_irrelevant=False)
+        ).google()
         qa_model = pipeline("question-answering", model=model)
         response = qa_model(question=query, context=" ".join(results[0]))
         return (response["answer"], results[1])
 
 
-# print(os.environ)
 print(
     answer(
-        query="What is Club is Crisitano Ronaldo in 2023?",
-        model="openai-text-davinci-003",
+        query="Best original song in 80th Golden Globe award 2023?",
+        model="openai-chatgpt",
     )
 )
-# def custom_answer
