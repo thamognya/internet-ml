@@ -1,4 +1,13 @@
 # type: ignore
+
+"""
+model naming convention
+# Open-AI models:
+include prefix openai-*
+# HuggingFace
+include prefix hf-*
+"""
+
 from typing import Any, List, Tuple
 
 import os
@@ -31,11 +40,6 @@ def answer(
     CHATGPT_CONVERSATION_ID: str = "",
     CHATGPT_PARENT_ID: str = "",
 ) -> tuple[Any, list[str]]:
-    # if environment keys are not given, assume it is in env
-    if GOOGLE_SEARCH_API_KEY == "":
-        GOOGLE_SEARCH_API_KEY = str(os.environ.get("GOOGLE_SEARCH_API_KEY"))
-    if GOOGLE_SEARCH_ENGINE_ID == "":
-        GOOGLE_SEARCH_ENGINE_ID = str(os.environ.get("GOOGLE_SEARCH_ENGINE_ID"))
     if OPENAI_API_KEY == "":
         OPENAI_API_KEY = str(os.environ.get("OPENAI_API_KEY"))
         openai.api_key = OPENAI_API_KEY
@@ -45,25 +49,20 @@ def answer(
         CHATGPT_CONVERSATION_ID = str(os.environ.get("CHATGPT_CONVERSATION_ID"))
     if CHATGPT_PARENT_ID == "":
         CHATGPT_PARENT_ID = str(os.environ.get("CHATGPT_PARENT_ID"))
-    """
-    model naming convention
-    # Open-AI models:
-    include prefix openai-*
-    # HuggingFace
-    include prefix hf-*
-    # 
-    """
+
     if not (model.startswith("openai-") or model.startswith("hf-")):
         model = "openai-chatgpt"  # Default
+
+    results: tuple[list[str], list[str]] = internet.Google(
+        query, GOOGLE_SEARCH_API_KEY, GOOGLE_SEARCH_ENGINE_ID
+    ).google()
+
     if model.startswith("openai-"):
         if model == "openai-chatgpt":
             # ChatGPT
-            results: tuple[list[str], list[str]] = internet.Google(
-                query, GOOGLE_SEARCH_API_KEY, GOOGLE_SEARCH_ENGINE_ID
-            ).google()
-            # print(' '.join(filter(lambda x: isinstance(x, str), results[0]))[:4000])
             prompt = f"Using the context: {' '.join(filter(lambda x: isinstance(x, str), results[0]))[:3000]} and answer the question with the context above and previous knowledge: \"{query}\". Also write long answers or essays if asked."
             print(prompt)
+            exit(1)
             chatbot = Chatbot(
                 {"session_token": CHATGPT_SESSION_TOKEN},
                 conversation_id=None,
@@ -77,14 +76,11 @@ def answer(
             return (response["message"], results[1])
         else:
             if model == "openai-text-davinci-003":
-                results: tuple[list[str], list[str]] = internet.Google(
-                    query, GOOGLE_SEARCH_API_KEY, GOOGLE_SEARCH_ENGINE_ID
-                ).google()
-                context = " ".join(results[0])
-                context[: (4097 - len(query) - 10)]
+                # text-davinci-003
+                prompt = f"Using the context: {' '.join(filter(lambda x: isinstance(x, str), results[0]))[:3000]} and answer the question with the context above and previous knowledge: \"{query}\". Also write long answers or essays if asked."
                 response = openai.Completion.create(
                     model="text-davinci-003",
-                    prompt=f"{context} Q: {query}",
+                    prompt=prompt,
                     max_tokens=len(context),
                     n=1,
                     stop=None,
@@ -94,9 +90,6 @@ def answer(
             # TODO: add suport later
     else:
         model = model.replace("hf-", "", 1)
-        results: tuple[list[str], list[str]] = internet.Google(
-            query, GOOGLE_SEARCH_API_KEY, GOOGLE_SEARCH_ENGINE_ID
-        ).google()
         qa_model = pipeline("question-answering", model=model)
         response = qa_model(question=query, context=" ".join(results[0]))
         return (response["answer"], results[1])
