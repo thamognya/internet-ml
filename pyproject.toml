@@ -31,7 +31,7 @@ classifiers = [
 "internet-ml" = "internet_ml.__main__:app"
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.9"
 typer = {extras = ["all"], version = "^0.4.0"}
 rich = ">=10.14,<14.0"
 tokenizers = "^0.13.2"
