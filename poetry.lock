@@ -1794,13 +1794,13 @@ wheel = "*"
 
 [[package]]
 name = "openai"
-version = "0.26.0"
+version = "0.26.1"
 description = "Python client library for the OpenAI API"
 category = "main"
 optional = false
 python-versions = ">=3.7.1"
 files = [
-    {file = "openai-0.26.0.tar.gz", hash = "sha256:e5e8ef9a232be844ae9b2b443389ef4189ce56af70bfe4bee77fbaba4bbd504b"},
+    {file = "openai-0.26.1.tar.gz", hash = "sha256:85cbe75e0646ab38a0e4b4184237c69b3870721e3c1232341289966bccd98522"},
 ]
 
 [package.dependencies]
