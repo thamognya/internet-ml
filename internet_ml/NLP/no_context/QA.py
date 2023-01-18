@@ -1,5 +1,4 @@
 # type: ignore
-
 """
 model naming convention
 # Open-AI models:
@@ -7,16 +6,11 @@ include prefix openai-*
 # HuggingFace
 include prefix hf-*
 """
-
 from typing import Any, List, Tuple
 
 import os
 import sys
 from pathlib import Path
-
-import dotenv
-import openai
-from transformers import pipeline
 
 sys.path.append(str(Path(__file__).parent.parent.parent) + "/tools/NLP/data")
 sys.path.append(str(Path(__file__).parent.parent.parent) + "/tools/NLP")
@@ -24,8 +18,11 @@ sys.path.append(str(Path(__file__).parent.parent.parent) + "/tools")
 sys.path.append(str(Path(__file__).parent.parent.parent) + "/utils")
 
 import config
+import dotenv
 import internet
+import openai
 from ChatGPT import Chatbot
+from transformers import pipeline
 
 dotenv.load_dotenv()
 
@@ -37,18 +34,12 @@ def answer(
     GOOGLE_SEARCH_ENGINE_ID: str = "",
     OPENAI_API_KEY: str = "",
     CHATGPT_SESSION_TOKEN: str = "",
-    CHATGPT_CONVERSATION_ID: str = "",
-    CHATGPT_PARENT_ID: str = "",
 ) -> tuple[Any, list[str]]:
     if OPENAI_API_KEY == "":
         OPENAI_API_KEY = str(os.environ.get("OPENAI_API_KEY"))
         openai.api_key = OPENAI_API_KEY
     if CHATGPT_SESSION_TOKEN == "":
         CHATGPT_SESSION_TOKEN = str(os.environ.get("CHATGPT_SESSION_TOKEN"))
-    if CHATGPT_CONVERSATION_ID == "":
-        CHATGPT_CONVERSATION_ID = str(os.environ.get("CHATGPT_CONVERSATION_ID"))
-    if CHATGPT_PARENT_ID == "":
-        CHATGPT_PARENT_ID = str(os.environ.get("CHATGPT_PARENT_ID"))
 
     if not (model.startswith("openai-") or model.startswith("hf-")):
         model = "openai-chatgpt"  # Default
@@ -56,13 +47,13 @@ def answer(
     results: tuple[list[str], list[str]] = internet.Google(
         query, GOOGLE_SEARCH_API_KEY, GOOGLE_SEARCH_ENGINE_ID
     ).google()
+    context: str = str(" ".join([str(string) for string in results[0]]))
+    print(f"context: {context}")
 
     if model.startswith("openai-"):
         if model == "openai-chatgpt":
             # ChatGPT
-            prompt = f"Using the context: {' '.join(filter(lambda x: isinstance(x, str), results[0]))[:3000]} and answer the question with the context above and previous knowledge: \"{query}\". Also write long answers or essays if asked."
-            print(prompt)
-            exit(1)
+            prompt = f'Use the context: {context[:4000]} and answer the question: "{query}" with the context and prior knowledge. Also write at the very least long answers.'
             chatbot = Chatbot(
                 {"session_token": CHATGPT_SESSION_TOKEN},
                 conversation_id=None,
@@ -77,7 +68,7 @@ def answer(
         else:
             if model == "openai-text-davinci-003":
                 # text-davinci-003
-                prompt = f"Using the context: {' '.join(filter(lambda x: isinstance(x, str), results[0]))[:3000]} and answer the question with the context above and previous knowledge: \"{query}\". Also write long answers or essays if asked."
+                prompt = f'Use the context: {context[:3000]} and answer the question: "{query}" with the context and prior knowledge. Also write at the very least long answers.'
                 response = openai.Completion.create(
                     model="text-davinci-003",
                     prompt=prompt,
@@ -89,15 +80,16 @@ def answer(
                 return (response.choices[0].text, results[1])
             # TODO: add suport later
     else:
+        # HuggingFace
         model = model.replace("hf-", "", 1)
         qa_model = pipeline("question-answering", model=model)
-        response = qa_model(question=query, context=" ".join(results[0]))
+        response = qa_model(question=query, context=context)
         return (response["answer"], results[1])
 
 
 print(
     answer(
-        query="Best original song in 80th Golden Globe award 2023?",
-        model="openai-chatgpt",
+        query="What is the newest pokemon game?",
+        model="hf-deepset/xlm-roberta-large-squad2",
     )
 )

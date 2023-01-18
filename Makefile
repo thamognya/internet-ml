@@ -16,6 +16,10 @@ docs-dev:
 docs-build:
 	mkdocs build
 
+.PHONY: publish
+publish:
+	poetry build && poetry publish --build --username $PYPI_USERNAME --password $PYPI_PASSWORD
+
 #* Poetry
 .PHONY: poetry-download
 poetry-download:
@@ -78,10 +82,11 @@ update-dev-deps:
 	poetry add --group dev --allow-prereleases black@latest
 
 .PHONY: update-deps
-update-deps: poetry update --lock && pip install -r requirements.txt
+update-deps: 
+	poetry update --lock
 
 .PHONY: update
-update: update-dev-deps update-deps
+update: update-dev-deps update-deps install
 
 
 #* Container / Docker
