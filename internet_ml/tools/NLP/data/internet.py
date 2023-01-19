@@ -100,9 +100,7 @@ class Google:
                 soup = BeautifulSoup(html, "html.parser")
                 text = soup.get_text()
                 normalized_text = normalizer(text)
-                sentences: list[str] = sentencizer(normalized_text)
-                sentence: str = str(" ".join(sentences))
-                return sentence
+                return normalized_text
         except Exception:
             error: str = ""
             return error
@@ -118,8 +116,9 @@ class Google:
     def __get_urls_contents(self: "Google") -> None:
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
-        self.__content = loop.run_until_complete(self.__fetch_urls(self.__urls))
+        contents = loop.run_until_complete(self.__fetch_urls(self.__urls))
         loop.close()
+        self.__content = contents
 
     def __filter_irrelevant_processing(self: "Google") -> None:
         with concurrent.futures.ThreadPoolExecutor(max_workers=500) as executor:
@@ -137,7 +136,7 @@ class Google:
         self.__get_urls_contents()
         if filter_irrelevant:
             self.__filter_irrelevant_processing()
-        results: tuple[list[str], list[str]] = (self.__content[0], self.__urls)  # type: ignore
+        results: tuple[list[str], list[str]] = (self.__content, self.__urls)  # type: ignore
         return results
 
 

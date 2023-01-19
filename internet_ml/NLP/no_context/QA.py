@@ -47,7 +47,7 @@ def answer(
     results: tuple[list[str], list[str]] = internet.Google(
         query, GOOGLE_SEARCH_API_KEY, GOOGLE_SEARCH_ENGINE_ID
     ).google()
-    context: str = str(" ".join([str(string) for string in results[0]]))
+    context: str = str(" ".join([str(string) for string in results]))
     print(f"context: {context}")
 
     if model.startswith("openai-"):
@@ -90,6 +90,6 @@ def answer(
 print(
     answer(
         query="What is the newest pokemon game?",
-        model="hf-deepset/xlm-roberta-large-squad2",
+        model="openai-chatgpt",
     )
 )
