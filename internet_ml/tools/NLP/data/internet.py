@@ -1,3 +1,4 @@
+# type: ignore
 from typing import Any, List, Tuple
 
 import asyncio
@@ -47,11 +48,7 @@ class Google:
             self.__GOOGLE_SEARCH_ENGINE_ID = str(
                 os.environ.get("GOOGLE_SEARCH_ENGINE_ID")
             )
-        self.__num_res: int = (
-            5
-            if config.NLP_CONF_MODE == "speed"
-            else (20 if config.NLP_CONF_MODE else 10)
-        )
+        self.__num_res: int = 10
         self.__query = query
         self.__URL_EXTRACTOR: URLExtract = URLExtract()
         self.__urls: list[str] = self.__URL_EXTRACTOR.find_urls(query)
@@ -136,7 +133,7 @@ class Google:
         self.__get_urls_contents()
         if filter_irrelevant:
             self.__filter_irrelevant_processing()
-        results: tuple[list[str], list[str]] = (self.__content, self.__urls)  # type: ignore
+        results: tuple[list[str], list[str]] = (self.__content, self.__urls)
         return results
 
 

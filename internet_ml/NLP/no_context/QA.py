@@ -44,9 +44,11 @@ def answer(
     if not (model.startswith("openai-") or model.startswith("hf-")):
         model = "openai-chatgpt"  # Default
 
+    print("Scraping the Internet")
     results: tuple[list[str], list[str]] = internet.Google(
         query, GOOGLE_SEARCH_API_KEY, GOOGLE_SEARCH_ENGINE_ID
     ).google()
+    print("Done scraping the Internet")
     context: str = str(" ".join([str(string) for string in results]))
     print(f"context: {context}")
 
@@ -85,11 +87,3 @@ def answer(
         qa_model = pipeline("question-answering", model=model)
         response = qa_model(question=query, context=context)
         return (response["answer"], results[1])
-
-
-print(
-    answer(
-        query="What is the newest pokemon game?",
-        model="openai-chatgpt",
-    )
-)
