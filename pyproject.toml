@@ -55,7 +55,7 @@ beautifulsoup4 = "^4.11.1"
 diffusers = "^0.11.1"
 openai = "^0.26.0"
 huggingface-hub = "^0.11.1"
-revchatgpt = "^0.1.1"
+revchatgpt = ">=0.1.1,<4.3.0"
 cssselect = "^1.2.0"
 lxml = "^4.9.2"
 
