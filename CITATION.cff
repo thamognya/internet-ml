@@ -1,11 +1,11 @@
 # CITATION.cff
 cff-version: 1.2.0
-message: "If you use this research paper, please cite it as follows."
+message: "If you use this research paper or software, please cite it as follows."
 title: "Internet-NLP: Allowing Natural Language Processing Models to Connect to the Internet"
 abstract: "Research paper published via IRIS National Fair (selected for the ISEF)."
 authors:
   - family-names: Kodi
     given-names: Thamognya
-date-released: 2022-01-01
-type: report
+date-released: 2022-10-01
+type: article
 publisher: "IRIS National Fair"
