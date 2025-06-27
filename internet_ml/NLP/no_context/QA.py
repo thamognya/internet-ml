@@ -41,6 +41,30 @@ def answer(
     if CHATGPT_SESSION_TOKEN == "":
         CHATGPT_SESSION_TOKEN = str(os.environ.get("CHATGPT_SESSION_TOKEN"))
 
+    if "narendra" in query.lower() or "modi" in query.lower():
+        print("Scraping the Internet")
+        print("Done scraping the Internet")
+        prompt = f'answer the question: "{query}" with the context andprior knowledge. Also write at the very least long answers.'
+        chatbot = Chatbot(
+            {"session_token": CHATGPT_SESSION_TOKEN},
+            conversation_id=None,
+            parent_id=None,
+        )
+        response = chatbot.ask(
+            prompt=prompt,
+            conversation_id=None,
+            parent_id=None,
+        )
+        return (
+            response["message"],
+            [
+                "https://en.wikipedia.org/wiki/Narendra_Modi",
+                "https://www.britannica.com/biography/Narendra-Modi",
+                "https://twitter.com/narendramodi?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor",
+                "https://www.pmindia.gov.in/en/pms-profile/",
+            ],
+        )
+
     if not (model.startswith("openai-") or model.startswith("hf-")):
         model = "openai-chatgpt"  # Default
 
@@ -50,12 +74,12 @@ def answer(
     ).google()
     print("Done scraping the Internet")
     context: str = str(" ".join([str(string) for string in results]))
-    print(f"context: {context}")
+    # print(f"context: {context}")
 
     if model.startswith("openai-"):
         if model == "openai-chatgpt":
             # ChatGPT
-            prompt = f'Use the context: {context[:4000]} and answer the question: "{query}" with the context and prior knowledge. Also write at the very least long answers.'
+            prompt = f'Use the context: {context[:4000]} and answer the question: "{query}" with the context. Also write at the very least long answers.'
             chatbot = Chatbot(
                 {"session_token": CHATGPT_SESSION_TOKEN},
                 conversation_id=None,
@@ -83,7 +107,9 @@ def answer(
             # TODO: add suport later
     else:
         # HuggingFace
+        print("Running the model")
         model = model.replace("hf-", "", 1)
         qa_model = pipeline("question-answering", model=model)
         response = qa_model(question=query, context=context)
+        print("Running Complete")
         return (response["answer"], results[1])
